@@ -16,6 +16,7 @@ SOURCES.Layout = [=[
 return {
 	Spikes = { { -0.32, 0, 0.58 }, { 0.38, 0, 0.5 }, { 0.74, 0, -0.192 }, { -0.82, 0, 0.112 }, { -0.352, 0, -0.352 }, { 0.388, 0, -0.548 }, { -0.68, 0, -0.632 } },
 	Ribbons = { { { -0.14, 0.0, 0.18 }, { -0.1836, 0.0046, 0.2155 }, { -0.2462, 0.0114, 0.2663 }, { -0.3158, 0.0186, 0.3239 }, { -0.38, 0.025, 0.38 }, { -0.4395, 0.0303, 0.4352 }, { -0.4995, 0.0353, 0.493 }, { -0.5548, 0.0397, 0.5493 }, { -0.6, 0.0433, 0.6 }, { -0.6356, 0.0461, 0.6446 }, { -0.6638, 0.0482, 0.685 }, { -0.682, 0.0495, 0.7209 }, { -0.688, 0.05, 0.752 }, { -0.6781, 0.0495, 0.7803 }, { -0.6545, 0.0482, 0.8052 }, { -0.6237, 0.0461, 0.8226 }, { -0.592, 0.0433, 0.828 }, { -0.5575, 0.0397, 0.8178 }, { -0.518, 0.0353, 0.7953 }, { -0.4795, 0.0303, 0.766 }, { -0.448, 0.025, 0.736 }, { -0.4249, 0.0186, 0.7019 }, { -0.407, 0.0114, 0.6623 }, { -0.3936, 0.0046, 0.6255 }, { -0.384, 0.0, 0.6 } }, { { 0.14, 0.0, 0.12 }, { 0.1791, -0.0046, 0.1419 }, { 0.235, -0.0114, 0.1735 }, { 0.2984, -0.0186, 0.2083 }, { 0.36, -0.025, 0.24 }, { 0.4199, -0.0303, 0.2705 }, { 0.4823, -0.0353, 0.302 }, { 0.5435, -0.0397, 0.3285 }, { 0.6, -0.0433, 0.344 }, { 0.6529, -0.0461, 0.3456 }, { 0.7035, -0.0482, 0.337 }, { 0.7483, -0.0495, 0.3219 }, { 0.784, -0.05, 0.304 }, { 0.8102, -0.0495, 0.2819 }, { 0.8285, -0.0482, 0.2545 }, { 0.8386, -0.0461, 0.2258 }, { 0.84, -0.0433, 0.2 }, { 0.8314, -0.0397, 0.177 }, { 0.8135, -0.0353, 0.155 }, { 0.7888, -0.0303, 0.1355 }, { 0.76, -0.025, 0.12 }, { 0.7219, -0.0186, 0.1095 }, { 0.675, -0.0114, 0.103 }, { 0.6306, -0.0046, 0.099 }, { 0.6, -0.0, 0.096 } }, { { -0.14, 0.0, -0.14 }, { -0.1813, 0.0055, -0.1656 }, { -0.241, 0.0136, -0.2025 }, { -0.3052, 0.0221, -0.2431 }, { -0.36, 0.0294, -0.28 }, { -0.4052, 0.0351, -0.3118 }, { -0.447, 0.0403, -0.3423 }, { -0.4813, 0.0446, -0.3716 }, { -0.504, 0.0476, -0.4 }, { -0.5125, 0.0493, -0.43 }, { -0.5095, 0.0498, -0.4608 }, { -0.4988, 0.0493, -0.4871 }, { -0.484, 0.0476, -0.504 }, { -0.4638, 0.0446, -0.5096 }, { -0.437, 0.0403, -0.5067 }, { -0.4077, 0.0351, -0.4975 }, { -0.38, 0.0294, -0.484 }, { -0.3524, 0.0221, -0.4623 }, { -0.3235, 0.0136, -0.4327 }, { -0.2979, 0.0055, -0.4038 }, { -0.28, 0.0, -0.384 } }, { { 0.16, 0.0, -0.16 }, { 0.1865, -0.0068, -0.1887 }, { 0.225, -0.0168, -0.23 }, { 0.265, -0.0271, -0.2763 }, { 0.296, -0.0354, -0.32 }, { 0.3167, -0.0412, -0.3618 }, { 0.3322, -0.0458, -0.4047 }, { 0.3417, -0.0489, -0.4453 }, { 0.344, -0.05, -0.48 }, { 0.3372, -0.0489, -0.5097 }, { 0.3223, -0.0458, -0.5358 }, { 0.3032, -0.0412, -0.5549 }, { 0.284, -0.0354, -0.564 }, { 0.2627, -0.0271, -0.5577 }, { 0.2383, -0.0168, -0.5392 }, { 0.2157, -0.0068, -0.5182 }, { 0.2, -0.0, -0.504 } } },
+	Figure8 = { { 0.1233, 0.0, -0.0575 }, { 0.1278, 0.0, -0.0465 }, { 0.1314, 0.0, -0.0352 }, { 0.1339, 0.0, -0.0236 }, { 0.1355, 0.0, -0.0119 }, { 0.136, 0.0, 0.0 }, { 0.1355, 0.0, 0.0119 }, { 0.1339, 0.0, 0.0236 }, { 0.1314, 0.0, 0.0352 }, { 0.1278, 0.0, 0.0465 }, { 0.1233, 0.0, 0.0575 }, { 0.1178, 0.0, 0.068 }, { 0.1114, 0.0, 0.078 }, { 0.1042, 0.0, 0.0874 }, { 0.0962, 0.0, 0.0962 }, { 0.0874, 0.0, 0.1042 }, { 0.078, 0.0, 0.1114 }, { 0.068, 0.0, 0.1178 }, { 0.0575, 0.0, 0.1233 }, { 0.0465, 0.0, 0.1278 }, { 0.0352, 0.0, 0.1314 }, { 0.0236, 0.0, 0.1339 }, { 0.0119, 0.0, 0.1355 }, { 0.0, 0.0, 0.136 }, { -0.0119, 0.0, 0.1355 }, { -0.0236, 0.0, 0.1339 }, { -0.0352, 0.0, 0.1314 }, { -0.0465, 0.0, 0.1278 }, { -0.0575, 0.0, 0.1233 }, { -0.068, 0.0, 0.1178 }, { -0.078, 0.0, 0.1114 }, { -0.0874, 0.0, 0.1042 }, { -0.0962, 0.0, 0.0962 }, { -0.1042, 0.0, 0.0874 }, { -0.1114, 0.0, 0.078 }, { -0.1178, 0.0, 0.068 }, { -0.1233, 0.0, 0.0575 }, { -0.1278, 0.0, 0.0465 }, { -0.1314, 0.0, 0.0352 }, { -0.1339, 0.0, 0.0236 }, { -0.1355, 0.0, 0.0119 }, { -0.136, 0.0, 0.0 }, { -0.1355, 0.0, -0.0119 }, { -0.1339, 0.0, -0.0236 }, { -0.1314, 0.0, -0.0352 }, { -0.1278, 0.0, -0.0465 }, { -0.1233, 0.0, -0.0575 }, { -0.1179, 0.0, -0.0667 }, { -0.1111, 0.0, -0.0749 }, { -0.103, 0.0, -0.0822 }, { -0.0936, 0.0, -0.0886 }, { -0.0833, 0.0, -0.0943 }, { -0.072, 0.0, -0.0994 }, { -0.0599, 0.0, -0.1039 }, { -0.0473, 0.0, -0.1079 }, { -0.0341, 0.0, -0.1116 }, { -0.0206, 0.0, -0.1151 }, { -0.0069, 0.0, -0.1184 }, { 0.0069, 0.0, -0.1216 }, { 0.0206, 0.0, -0.1249 }, { 0.0341, 0.0, -0.1284 }, { 0.0473, 0.0, -0.1321 }, { 0.0599, 0.0, -0.1361 }, { 0.072, 0.0, -0.1406 }, { 0.0833, 0.0, -0.1457 }, { 0.0936, 0.0, -0.1514 }, { 0.103, 0.0, -0.1578 }, { 0.1111, 0.0, -0.1651 }, { 0.1179, 0.0, -0.1733 }, { 0.1233, 0.0, -0.1825 }, { 0.1278, 0.0, -0.1935 }, { 0.1314, 0.0, -0.2048 }, { 0.1339, 0.0, -0.2164 }, { 0.1355, 0.0, -0.2281 }, { 0.136, 0.0, -0.24 }, { 0.1355, 0.0, -0.2519 }, { 0.1339, 0.0, -0.2636 }, { 0.1314, 0.0, -0.2752 }, { 0.1278, 0.0, -0.2865 }, { 0.1233, 0.0, -0.2975 }, { 0.1178, 0.0, -0.308 }, { 0.1114, 0.0, -0.318 }, { 0.1042, 0.0, -0.3274 }, { 0.0962, 0.0, -0.3362 }, { 0.0874, 0.0, -0.3442 }, { 0.078, 0.0, -0.3514 }, { 0.068, 0.0, -0.3578 }, { 0.0575, 0.0, -0.3633 }, { 0.0465, 0.0, -0.3678 }, { 0.0352, 0.0, -0.3714 }, { 0.0236, 0.0, -0.3739 }, { 0.0119, 0.0, -0.3755 }, { 0.0, 0.0, -0.376 }, { -0.0119, 0.0, -0.3755 }, { -0.0236, 0.0, -0.3739 }, { -0.0352, 0.0, -0.3714 }, { -0.0465, 0.0, -0.3678 }, { -0.0575, 0.0, -0.3633 }, { -0.068, 0.0, -0.3578 }, { -0.078, 0.0, -0.3514 }, { -0.0874, 0.0, -0.3442 }, { -0.0962, 0.0, -0.3362 }, { -0.1042, 0.0, -0.3274 }, { -0.1114, 0.0, -0.318 }, { -0.1178, 0.0, -0.308 }, { -0.1233, 0.0, -0.2975 }, { -0.1278, 0.0, -0.2865 }, { -0.1314, 0.0, -0.2752 }, { -0.1339, 0.0, -0.2636 }, { -0.1355, 0.0, -0.2519 }, { -0.136, 0.0, -0.24 }, { -0.1355, 0.0, -0.2281 }, { -0.1339, 0.0, -0.2164 }, { -0.1314, 0.0, -0.2048 }, { -0.1278, 0.0, -0.1935 }, { -0.1233, 0.0, -0.1825 }, { -0.1179, 0.0, -0.1733 }, { -0.1111, 0.0, -0.1651 }, { -0.103, 0.0, -0.1578 }, { -0.0936, 0.0, -0.1514 }, { -0.0833, 0.0, -0.1457 }, { -0.072, 0.0, -0.1406 }, { -0.0599, 0.0, -0.1361 }, { -0.0473, 0.0, -0.1321 }, { -0.0341, 0.0, -0.1284 }, { -0.0206, 0.0, -0.1249 }, { -0.0069, 0.0, -0.1216 }, { 0.0069, 0.0, -0.1184 }, { 0.0206, 0.0, -0.1151 }, { 0.0341, 0.0, -0.1116 }, { 0.0473, 0.0, -0.1079 }, { 0.0599, 0.0, -0.1039 }, { 0.072, 0.0, -0.0994 }, { 0.0833, 0.0, -0.0943 }, { 0.0936, 0.0, -0.0886 }, { 0.103, 0.0, -0.0822 }, { 0.1111, 0.0, -0.0749 }, { 0.1179, 0.0, -0.0667 }, { 0.1233, 0.0, -0.0575 } },
 }
 ]=]
 SOURCES.Config = [=[
@@ -24,12 +25,13 @@ SOURCES.Config = [=[
 
 local Config = {}
 
--- Colours of the glowing (Neon) parts of the sword.
+-- Colours of the faint glowing (Neon) base under the effects. The look itself comes from
+-- the effect textures (see Config.VFX.MeshTransparency).
 Config.Colors = {
-	Yellow = Color3.fromRGB(255, 232, 140), -- hot core of the blade, ring, spike cores
-	Orange = Color3.fromRGB(255, 108, 24), -- blade band, halo, handle band
+	Yellow = Color3.fromRGB(255, 232, 140), -- hot core of the blade, spike cores
+	Orange = Color3.fromRGB(255, 108, 24), -- blade band, handle band
 	Red = Color3.fromRGB(226, 32, 16), -- red band, flame petals
-	Ink = Color3.fromRGB(44, 5, 4), -- the dark outlines (blade edge, spikes, eye)
+	Ink = Color3.fromRGB(44, 5, 4), -- the dark outlines (blade edge, spikes)
 	Handle = Color3.fromRGB(112, 22, 8),
 	Sparkle = Color3.fromRGB(255, 255, 255),
 	Aura = Color3.fromRGB(255, 118, 40), -- ForceField heat shimmer around the blade
@@ -75,8 +77,8 @@ Config.Sounds = {
 }
 
 -- Paste uploaded image IDs here to override the imported textures, e.g. Starburst = "rbxassetid://1".
--- Keys: BladePaint HandlePaint Streak SlashStrip Trail Starburst Crescent Dart Portal Swirl
--- RedSwirl FireLick Spark Ember Glow Twinkle
+-- Keys: BladePaint HandlePaint EnergyRing EnergySpike HotCore Void FlowStroke EnergyBand EnergyFlow EnergyWisp
+-- Streak SlashStrip Trail Starburst Crescent Dart Portal Swirl RedSwirl FireLick Spark Ember Glow Twinkle
 Config.Textures = {}
 
 Config.FallbackTextures = {
@@ -85,6 +87,15 @@ Config.FallbackTextures = {
 }
 
 Config.VFX = {
+	-- The sword is drawn by effects; the meshes underneath are only a faint glow.
+	-- 1 = effects only, 0 = solid meshes.
+	MeshTransparency = 0.8,
+	-- Energy flowing round the two blended circles at the star, as one figure-8 stream.
+	Figure8 = true,
+	FlowSpeed = 0.6, -- laps per second
+	FlowStrands = 3, -- streams chasing each other round the figure-8
+	FlowLifetime = 0.4, -- length of each stream's light trail (seconds)
+	FlowWidth = 0.06,
 	IdleRange = 140, -- idle extras only run when the camera is this close
 	Swirls = true, -- red swirl trails tracing the ribbons around the star
 	SwirlSpeed = 1.5, -- strokes per second
@@ -104,8 +115,9 @@ return Config
 SOURCES.StarburstVFX = [=[
 -- Starburst Blade effects. Lives in ReplicatedStorage.StarburstSword.StarburstVFX.
 -- Clients play everything; the server only calls ApplyColors / ComputeImpact.
--- Textures are pre-coloured (fire with dark outlines, like the reference sheet), so
--- most effects use a white tint and low LightEmission to keep the outlines dark.
+-- The sword itself is drawn by additive energy layers (LightEmission 1); the attack
+-- textures are pre-coloured (fire with dark outlines, like the reference sheet), so those
+-- effects use a white tint and low LightEmission to keep the outlines dark.
 
 local Debris = game:GetService("Debris")
 local Lighting = game:GetService("Lighting")
@@ -118,6 +130,15 @@ local Config = require(Folder:WaitForChild("Config"))
 local Layout = require(Folder:WaitForChild("Layout"))
 
 local VFX = {}
+
+-- Config.VFX value with a default, so a Config kept from an older install still works.
+local function opt(key, default)
+	local v = Config.VFX[key]
+	if v == nil then
+		return default
+	end
+	return v
+end
 
 -- ---------------------------------------------------------------- lookups
 
@@ -139,13 +160,20 @@ function VFX.Texture(key)
 	return Config.FallbackTextures[key] or Config.FallbackTextures.Default, true
 end
 
--- Applies Config.Colors to parts tagged with a ColorKey attribute and refreshes
--- every emitter / beam / trail tagged with a TextureKey attribute.
+-- Applies Config.Colors (and the mesh transparency) to parts tagged with a ColorKey
+-- attribute and refreshes every emitter / beam / trail tagged with a TextureKey attribute.
 function VFX.ApplyColors(tool)
+	local meshTransparency = opt("MeshTransparency", 0.8)
 	for _, inst in ipairs(tool:GetDescendants()) do
 		local colorKey = inst:GetAttribute("ColorKey")
 		if colorKey and Config.Colors[colorKey] and (inst:IsA("BasePart") or inst:IsA("Light")) then
 			inst.Color = Config.Colors[colorKey]
+		end
+		if colorKey and colorKey ~= "Aura" and inst:IsA("BasePart") then
+			inst.Transparency = meshTransparency
+		end
+		if inst:IsA("Beam") and inst:GetAttribute("Figure8") then
+			inst.Enabled = opt("Figure8", true)
 		end
 		local key = inst:GetAttribute("TextureKey")
 		if key and (inst:IsA("ParticleEmitter") or inst:IsA("Trail") or inst:IsA("Beam")) then
@@ -686,18 +714,29 @@ function VFX.StartIdle(tool)
 		return
 	end
 	local scale = tool:GetAttribute("SwordScale") or 1
-	local state = { swirls = {}, nextDart = os.clock() + 1, nextPulse = os.clock() + 2 }
+	local state = {
+		swirls = {},
+		flows = {},
+		spikes = {},
+		body = {},
+		nextDart = os.clock() + 1,
+		nextPulse = os.clock() + 2,
+	}
+	local function polyline(raw)
+		local path, lengths, total = {}, {}, 0
+		for _, p in ipairs(raw) do
+			table.insert(path, layoutToLocal(star, p, scale))
+		end
+		for k = 1, #path - 1 do
+			lengths[k] = (path[k + 1] - path[k]).Magnitude
+			total += lengths[k]
+		end
+		return path, lengths, total
+	end
 	if Config.VFX.Swirls then
 		local tex = VFX.Texture("RedSwirl")
 		for i, raw in ipairs(Layout.Ribbons) do
-			local path, lengths, total = {}, {}, 0
-			for _, p in ipairs(raw) do
-				table.insert(path, layoutToLocal(star, p, scale))
-			end
-			for k = 1, #path - 1 do
-				lengths[k] = (path[k + 1] - path[k]).Magnitude
-				total += lengths[k]
-			end
+			local path, lengths, total = polyline(raw)
 			local a0, a1 = Instance.new("Attachment"), Instance.new("Attachment")
 			a0.Name, a1.Name = "Swirl" .. i .. "A", "Swirl" .. i .. "B"
 			a0.Parent, a1.Parent = shell, shell
@@ -726,6 +765,66 @@ function VFX.StartIdle(tool)
 			})
 		end
 	end
+	-- One stream of energy round both circles at the star, so they read as one structure.
+	-- Its glowing body is the ring of curved "Figure8Body" beams the installer built (a wave
+	-- of light runs round it below); here a few bright heads chase each other round the same
+	-- closed path, braiding as they go and shedding sparkle dust.
+	local figure8 = Layout.Figure8
+	if opt("Figure8", true) and figure8 and #figure8 > 2 then
+		local path, lengths, total = polyline(figure8)
+		local strands = math.max(1, math.floor(opt("FlowStrands", 3)))
+		local flowTex, dustTex = VFX.Texture("FlowStroke"), VFX.Texture("Twinkle")
+		for i = 1, strands do
+			local a0, a1 = Instance.new("Attachment"), Instance.new("Attachment")
+			a0.Name, a1.Name = "Flow" .. i .. "A", "Flow" .. i .. "B"
+			a0.Parent, a1.Parent = shell, shell
+			local trail = Instance.new("Trail")
+			trail.Attachment0, trail.Attachment1 = a0, a1
+			trail.Texture = flowTex
+			trail.TextureMode = Enum.TextureMode.Stretch
+			trail.Lifetime = opt("FlowLifetime", 0.4)
+			trail.MinLength = 0.01
+			trail.FaceCamera = true
+			trail.LightEmission = 1
+			trail.LightInfluence = 0
+			trail.WidthScale = ns({ { 0, 1 }, { 1, 0.2 } })
+			trail.Transparency = ns({ { 0, 0 }, { 1, 1 } })
+			trail.Enabled = false
+			trail.Parent = shell
+			local dust = newEmitter(a1, {
+				Texture = dustTex,
+				Rate = 16,
+				Lifetime = NumberRange.new(0.25, 0.5),
+				Speed = NumberRange.new(0.1 * scale, 0.4 * scale),
+				SpreadAngle = Vector2.new(180, 180),
+				Drag = 3,
+				Rotation = NumberRange.new(0, 45),
+				Size = ns({ { 0, 0 }, { 0.3, 0.06 * scale }, { 1, 0 } }),
+				LightEmission = 1,
+				ZOffset = 0.4,
+			})
+			table.insert(state.flows, {
+				a0 = a0,
+				a1 = a1,
+				trail = trail,
+				dust = dust,
+				path = path,
+				lengths = lengths,
+				total = total,
+				phase = (i - 1) / strands + 0.1,
+			})
+		end
+	end
+	for _, d in ipairs(shell:GetChildren()) do
+		if d:IsA("Beam") and d:GetAttribute("Spike") then
+			table.insert(state.spikes, d)
+		elseif d:IsA("Beam") and d:GetAttribute("Figure8") then
+			table.insert(state.body, d)
+		end
+	end
+	table.sort(state.body, function(a, b)
+		return a:GetAttribute("Figure8") < b:GetAttribute("Figure8")
+	end)
 	state.conn = RunService.RenderStepped:Connect(function()
 		if not (tool.Parent and shell.Parent) then
 			VFX.StopIdle(tool)
@@ -750,8 +849,35 @@ function VFX.StartIdle(tool)
 			sw.trail.Enabled = drawing and s >= sw.last
 			sw.last = s
 		end
+		-- the figure-8 path is closed, so the streams never jump and their trails stay on
+		local flowSpeed, flowWidth = opt("FlowSpeed", 0.6), opt("FlowWidth", 0.06) * scale
+		for _, fl in ipairs(state.flows) do
+			if near then
+				local s = (now * flowSpeed + fl.phase) % 1
+				local pos, dir = along(fl.path, fl.lengths, fl.total, s)
+				local side = dir.Magnitude > 1e-4 and dir.Unit:Cross(normal) or Vector3.xAxis
+				local braid = side * (0.011 * scale) * math.sin(2 * math.pi * (s * 4 + fl.phase))
+				fl.a0.Position = pos + braid - side * flowWidth * 0.5
+				fl.a1.Position = pos + braid + side * flowWidth * 0.5
+			end
+			fl.trail.Enabled = near
+			fl.dust.Enabled = near
+		end
 		if not near then
 			return
+		end
+		-- a wave of light runs round the figure-8's body, moving with the streams
+		local count = #state.body
+		local function bodyTransparency(k)
+			return 0.45 - 0.25 * math.sin(2 * math.pi * (k / count - now * flowSpeed))
+		end
+		for i, beam in ipairs(state.body) do
+			beam.Transparency = NumberSequence.new(bodyTransparency(i - 1), bodyTransparency(i))
+		end
+		-- the spikes flicker like live energy
+		for i, beam in ipairs(state.spikes) do
+			local f = 0.5 + 0.5 * math.sin(now * 6 + i * 1.9) * math.sin(now * 2.3 + i)
+			beam.Transparency = NumberSequence.new(0.3 * f)
 		end
 		if Config.VFX.Darts and now >= state.nextDart and #Layout.Spikes > 0 then
 			state.nextDart = now + 1.2 + math.random() * 1.4
@@ -784,6 +910,16 @@ function VFX.StopIdle(tool)
 		sw.trail:Destroy()
 		sw.a0:Destroy()
 		sw.a1:Destroy()
+	end
+	for _, fl in ipairs(state.flows) do
+		fl.trail:Destroy()
+		fl.a0:Destroy()
+		fl.a1:Destroy() -- also removes the dust emitter riding on it
+	end
+	for _, beam in ipairs(state.spikes) do
+		if beam.Parent then
+			beam.Transparency = NumberSequence.new(0)
+		end
 	end
 end
 
@@ -1214,6 +1350,9 @@ local LAYOUT = {
 		HandleStart = { 0, 0, -0.096 },
 		HandleEnd = { 0, 0, -1.528 },
 		Grip = { 0, 0, -0.44 },
+		RingA = { 0.0, 0.0, 0.0 },
+		RingB = { 0.0, 0.0, -0.24 },
+		Junction = { 0.0, 0.0, -0.12 },
 	},
 	bladeVolume = {
 		centre = { 0, 0, 1.536 },
@@ -1221,7 +1360,39 @@ local LAYOUT = {
 	},
 	bladePaintWidth = 0.42,
 	handlePaintWidth = 0.22,
-	textureKeys = { "BladePaint", "HandlePaint", "Streak", "SlashStrip", "Trail", "Starburst", "Crescent", "Dart", "Portal", "Swirl", "RedSwirl", "FireLick", "Spark", "Ember", "Glow", "Twinkle" },
+	ringRadius = 0.136,
+	eyeRadius = 0.072,
+	spikeBeams = { {
+		base = { -0.0155, 0.0, 0.028 },
+		tip = { -0.3328, 0.0, 0.6032 },
+		width = 0.228,
+	}, {
+		base = { 0.0194, 0.0, 0.0255 },
+		tip = { 0.3952, 0.0, 0.52 },
+		width = 0.152,
+	}, {
+		base = { 0.031, 0.0, -0.008 },
+		tip = { 0.7696, 0.0, -0.1997 },
+		width = 0.228,
+	}, {
+		base = { -0.0317, 0.0, 0.0043 },
+		tip = { -0.8528, 0.0, 0.1165 },
+		width = 0.2432,
+	}, {
+		base = { -0.0226, 0.0, -0.0226 },
+		tip = { -0.3661, 0.0, -0.3661 },
+		width = 0.1824,
+	}, {
+		base = { 0.0185, 0.0, -0.0261 },
+		tip = { 0.4035, 0.0, -0.5699 },
+		width = 0.1824,
+	}, {
+		base = { -0.0234, 0.0, -0.0218 },
+		tip = { -0.7072, 0.0, -0.6573 },
+		width = 0.0912,
+	} },
+	figure8Body = { { 0.1233, 0.0, -0.0575 }, { 0.1355, 0.0, 0.0119 }, { 0.1114, 0.0, 0.078 }, { 0.0575, 0.0, 0.1233 }, { -0.0119, 0.0, 0.1355 }, { -0.078, 0.0, 0.1114 }, { -0.1233, 0.0, 0.0575 }, { -0.1355, 0.0, -0.0119 }, { -0.1111, 0.0, -0.0749 }, { -0.0473, 0.0, -0.1079 }, { 0.0341, 0.0, -0.1284 }, { 0.103, 0.0, -0.1578 }, { 0.1339, 0.0, -0.2164 }, { 0.1278, 0.0, -0.2865 }, { 0.0874, 0.0, -0.3442 }, { 0.0236, 0.0, -0.3739 }, { -0.0465, 0.0, -0.3678 }, { -0.1042, 0.0, -0.3274 }, { -0.1339, 0.0, -0.2636 }, { -0.1278, 0.0, -0.1935 }, { -0.0833, 0.0, -0.1457 }, { -0.0069, 0.0, -0.1216 }, { 0.072, 0.0, -0.0994 }, { 0.1233, 0.0, -0.0575 } },
+	textureKeys = { "BladePaint", "HandlePaint", "EnergyRing", "EnergySpike", "HotCore", "Void", "FlowStroke", "EnergyBand", "EnergyFlow", "EnergyWisp", "Streak", "SlashStrip", "Trail", "Starburst", "Crescent", "Dart", "Portal", "Swirl", "RedSwirl", "FireLick", "Spark", "Ember", "Glow", "Twinkle" },
 }
 
 local ChangeHistoryService = game:GetService("ChangeHistoryService")
@@ -1237,7 +1408,8 @@ local Workspace = game:GetService("Workspace")
 local TOOL_NAME = "Starburst Blade"
 local TAG = "StarburstSword"
 local SWORD_PARTS = { "Handle", "Shell", "GlowOrange", "GlowYellow", "FlameRed", "Sparkles", "Aura" }
--- every visible part glows: the sword should read as an effect, not a solid object
+-- The sword is drawn by effects (beams and particles). The meshes are only a faint Neon base
+-- underneath (Config.VFX.MeshTransparency), so nothing reads as a solid object.
 local COLOR_KEYS = {
 	Handle = "Handle",
 	Shell = "Ink",
@@ -1467,6 +1639,7 @@ if swordModel then
 		f = markerFrame(swordModel)
 	end
 
+	local meshTransparency = (Config.VFX and Config.VFX.MeshTransparency) or 0.8
 	for name, key in pairs(COLOR_KEYS) do
 		local p = parts[name]
 		if p then
@@ -1476,6 +1649,7 @@ if swordModel then
 			end
 			p.Material = Enum.Material.Neon
 			p.CastShadow = false
+			p.Transparency = meshTransparency
 			p:SetAttribute("ColorKey", key)
 		end
 	end
@@ -1553,6 +1727,10 @@ if swordModel then
 	local aTrailBase = attach(fx, "TrailBase", P.TrailBase)
 	local aHandleStart = attach(shell, "HandleStart", P.HandleStart)
 	local aHandleEnd = attach(shell, "HandleEnd", P.HandleEnd)
+	-- the two blended energy circles (round the eye and round the top of the handle) and where they meet
+	local aRingA = attach(shell, "RingA", P.RingA)
+	local aRingB = attach(shell, "RingB", P.RingB)
+	local aJunction = attach(shell, "Junction", P.Junction)
 
 	-- the painted look: the blade and handle drawn by camera-facing beams, exactly as in the reference
 	make("Beam", {
@@ -1596,32 +1774,72 @@ if swordModel then
 		FaceCamera = true,
 		LightEmission = 1,
 		LightInfluence = 0,
-		Transparency = NumberSequence.new(0.72),
+		Transparency = NumberSequence.new(0.55),
 		ZOffset = -0.2,
 		Attributes = { TextureKey = "Glow" },
 	}, fx)
 
+	-- energy flowing through the blade and handle, and the star's spikes as beams of light
+	local function energyBeam(name, a0, a1, key, w0, w1, extra, parent)
+		local props = {
+			Name = name,
+			Attachment0 = a0,
+			Attachment1 = a1,
+			Texture = tex(key),
+			TextureMode = Enum.TextureMode.Stretch,
+			Width0 = w0 * s,
+			Width1 = w1 * s,
+			FaceCamera = true,
+			Segments = 1,
+			LightEmission = 1,
+			LightInfluence = 0,
+			ZOffset = 0.22,
+			Attributes = { TextureKey = key },
+		}
+		for k, v in pairs(extra or {}) do
+			props[k] = v
+		end
+		return make("Beam", props, parent)
+	end
+	local flowing = { TextureMode = Enum.TextureMode.Wrap, TextureLength = 0.9 * s, TextureSpeed = 1.4, ZOffset = 0.18 }
+	energyBeam("BladeFlow", aBladeStart, aTip, "EnergyFlow", 0.24, 0.015, flowing, fx)
+	energyBeam("BladeCore", aBladeStart, aTip, "FlowStroke", 0.09, 0.014, nil, fx)
+	energyBeam("HandleFlow", aHandleStart, aHandleEnd, "EnergyFlow", 0.14, 0.014, flowing, shell)
+	energyBeam("HandleCore", aHandleStart, aHandleEnd, "FlowStroke", 0.06, 0.012, nil, shell)
+	for i, sb in ipairs(LAYOUT.spikeBeams) do
+		energyBeam(
+			"SpikeGlow" .. i,
+			attach(shell, "SpikeBase" .. i, sb.base),
+			attach(shell, "SpikeTip" .. i, sb.tip),
+			"EnergySpike",
+			sb.width,
+			sb.width,
+			{ ZOffset = 0.2, Attributes = { TextureKey = "EnergySpike", Spike = true } },
+			shell
+		)
+	end
+
 	local box = Enum.ParticleEmitterShape.Box
-	-- flame licks crawling up the blade (pre-coloured flipbook keeps its dark outlines)
+	-- soft energy wisps curling off the blade and dissolving
 	make("ParticleEmitter", {
-		Name = "FireLicks",
-		Texture = tex("FireLick"),
+		Name = "EnergyWisps",
+		Texture = tex("EnergyWisp"),
 		FlipbookLayout = Enum.ParticleFlipbookLayout.Grid4x4,
 		FlipbookMode = Enum.ParticleFlipbookMode.OneShot,
-		Rate = 12,
-		Lifetime = NumberRange.new(0.45, 0.7),
+		Rate = 14,
+		Lifetime = NumberRange.new(0.5, 0.8),
 		Speed = NumberRange.new(0.3, 0.8),
 		SpreadAngle = Vector2.new(180, 180),
 		Shape = box,
 		ShapeStyle = Enum.ParticleEmitterShapeStyle.Surface,
 		Acceleration = Vector3.new(0, 2.5, 0),
 		Drag = 2,
-		Size = ns({ { 0, 0.18 * s }, { 0.4, 0.3 * s }, { 1, 0.22 * s } }),
-		Rotation = NumberRange.new(-15, 15),
-		LightEmission = 0.25,
+		Size = ns({ { 0, 0.14 * s }, { 0.4, 0.26 * s }, { 1, 0.2 * s } }),
+		Rotation = NumberRange.new(-20, 20),
+		LightEmission = 1,
 		LightInfluence = 0,
 		ZOffset = 0.3,
-		Attributes = { TextureKey = "FireLick", Flipbook = true },
+		Attributes = { TextureKey = "EnergyWisp", Flipbook = true },
 	}, fx)
 	make("ParticleEmitter", {
 		Name = "Embers",
@@ -1642,8 +1860,10 @@ if swordModel then
 	make("ParticleEmitter", {
 		Name = "Twinkles",
 		Texture = tex("Twinkle"),
-		Rate = 5,
+		Rate = 9,
 		Lifetime = NumberRange.new(0.35, 0.6),
+		Speed = NumberRange.new(0.05, 0.25),
+		SpreadAngle = Vector2.new(180, 180),
 		Shape = box,
 		ShapeStyle = Enum.ParticleEmitterShapeStyle.Volume,
 		Rotation = NumberRange.new(0, 45),
@@ -1671,35 +1891,154 @@ if swordModel then
 		LightInfluence = 0,
 		Attributes = { TextureKey = "Spark" },
 	}, fx)
-	-- the star: shimmering starbursts and a hot glow around the eye
+	-- the star: two soft energy rings that overlap and melt into each other, one figure-8
+	-- stream of energy running round both (its bright heads are added in game by StarburstVFX),
+	-- the dark eye in the top ring, a white-hot core where the rings meet, fragments and pulses
+	local still = NumberRange.new(0)
+	local ringSize = 2 * LAYOUT.ringRadius / 0.62 * s -- the texture's bright line sits at 62% of its radius
+	for _, a in ipairs({ aRingA, aRingB }) do
+		make("ParticleEmitter", {
+			Name = "EnergyRing",
+			Texture = tex("EnergyRing"),
+			Rate = 7,
+			Lifetime = NumberRange.new(0.45, 0.6),
+			Speed = still,
+			LockedToPart = true,
+			Rotation = NumberRange.new(0, 360),
+			RotSpeed = NumberRange.new(-90, 90),
+			Size = ns({ { 0, ringSize * 0.92 }, { 0.5, ringSize }, { 1, ringSize * 1.08 } }),
+			Transparency = ns({ { 0, 1 }, { 0.3, 0.6 }, { 0.7, 0.68 }, { 1, 1 } }),
+			LightEmission = 1,
+			LightInfluence = 0,
+			ZOffset = 0.3,
+			Attributes = { TextureKey = "EnergyRing" },
+		}, a)
+	end
+	-- the body of the figure-8 energy stream round both circles: a closed ring of curved beams
+	-- (each attachment's X axis follows the path, so the beams join smoothly). StarburstVFX runs
+	-- a wave of light round it and sends bright streams chasing along it.
+	local nodes = LAYOUT.figure8Body -- closed: the last point repeats the first
+	local ring = {}
+	for i = 1, #nodes - 1 do
+		local prev = nodes[i == 1 and #nodes - 1 or i - 1]
+		local tangent = (toWorld(f, nodes[i + 1]) - toWorld(f, prev)).Unit
+		local a = make("Attachment", { Name = "Figure8_" .. i }, shell)
+		a.WorldCFrame = CFrame.fromMatrix(toWorld(f, nodes[i]), tangent, f.Y)
+		ring[i] = a
+	end
+	for i, a0 in ipairs(ring) do
+		local a1 = ring[i % #ring + 1]
+		local handleLength = (a1.WorldPosition - a0.WorldPosition).Magnitude / 3
+		make("Beam", {
+			Name = "Figure8Body",
+			Attachment0 = a0,
+			Attachment1 = a1,
+			Texture = tex("EnergyBand"),
+			TextureMode = Enum.TextureMode.Stretch,
+			Width0 = 0.14 * s,
+			Width1 = 0.14 * s,
+			CurveSize0 = handleLength,
+			CurveSize1 = handleLength,
+			Segments = 8,
+			FaceCamera = true,
+			LightEmission = 1,
+			LightInfluence = 0,
+			Transparency = NumberSequence.new(0.45),
+			ZOffset = 0.28,
+			Attributes = { TextureKey = "EnergyBand", Figure8 = i },
+		}, shell)
+	end
+	local eye = LAYOUT.eyeRadius / 0.3 * s -- the Void texture is fully dark out to 30% of its radius
 	make("ParticleEmitter", {
-		Name = "StarShimmer",
-		Texture = tex("Starburst"),
+		Name = "EyeVoid",
+		Texture = tex("Void"),
 		Rate = 3,
-		Lifetime = NumberRange.new(0.7, 0.9),
+		Lifetime = NumberRange.new(1.2),
+		Speed = still,
 		LockedToPart = true,
 		Rotation = NumberRange.new(0, 360),
-		RotSpeed = NumberRange.new(-25, 25),
-		Size = ns({ { 0, 1.0 * s }, { 0.5, 1.3 * s }, { 1, 1.15 * s } }),
-		Transparency = ns({ { 0, 1 }, { 0.25, 0.2 }, { 0.75, 0.3 }, { 1, 1 } }),
-		LightEmission = 0.2,
+		RotSpeed = NumberRange.new(-20, 20),
+		Size = ns({ { 0, eye * 0.95 }, { 0.5, eye }, { 1, eye * 0.95 } }),
+		Transparency = ns({ { 0, 1 }, { 0.25, 0 }, { 0.75, 0 }, { 1, 1 } }),
+		LightEmission = 0,
+		LightInfluence = 0,
+		ZOffset = 0.38, -- over the glow, so the eye stays dark
+		Attributes = { TextureKey = "Void" },
+	}, aRingA)
+	make("ParticleEmitter", {
+		Name = "RingCore",
+		Texture = tex("HotCore"),
+		Rate = 4,
+		Lifetime = NumberRange.new(0.6),
+		Speed = still,
+		LockedToPart = true,
+		Size = ns({ { 0, LAYOUT.ringRadius * 1.4 * s }, { 1, LAYOUT.ringRadius * 1.6 * s } }),
+		Transparency = ns({ { 0, 1 }, { 0.3, 0.55 }, { 0.7, 0.6 }, { 1, 1 } }),
+		LightEmission = 1,
+		LightInfluence = 0,
+		ZOffset = 0.24,
+		Attributes = { TextureKey = "HotCore" },
+	}, aRingB)
+	make("ParticleEmitter", {
+		Name = "JunctionCore",
+		Texture = tex("HotCore"),
+		Rate = 10,
+		Lifetime = NumberRange.new(0.3, 0.45),
+		Speed = still,
+		LockedToPart = true,
+		Size = ns({ { 0, 0.22 * s }, { 0.5, 0.3 * s }, { 1, 0.25 * s } }),
+		Transparency = ns({ { 0, 1 }, { 0.3, 0.25 }, { 0.7, 0.35 }, { 1, 1 } }),
+		LightEmission = 1,
+		LightInfluence = 0,
+		ZOffset = 0.35,
+		Attributes = { TextureKey = "HotCore" },
+	}, aJunction)
+	make("ParticleEmitter", {
+		Name = "Fragments",
+		Texture = tex("Spark"),
+		Orientation = Enum.ParticleOrientation.VelocityParallel,
+		Rate = 9,
+		Lifetime = NumberRange.new(0.25, 0.45),
+		Speed = NumberRange.new(0.8 * s, 2.2 * s),
+		SpreadAngle = Vector2.new(180, 180),
+		Drag = 4,
+		Size = ns({ { 0, 0.07 * s }, { 1, 0 } }),
+		Transparency = ns({ { 0, 0 }, { 1, 1 } }),
+		LightEmission = 1,
+		LightInfluence = 0,
+		ZOffset = 0.35,
+		Attributes = { TextureKey = "Spark" },
+	}, aJunction)
+	-- an energy ring pulsing out of the circles now and then (more of them while charging)
+	make("ParticleEmitter", {
+		Name = "StarShimmer",
+		Texture = tex("EnergyRing"),
+		Rate = 0.6,
+		Lifetime = NumberRange.new(0.6, 0.7),
+		Speed = still,
+		LockedToPart = true,
+		Rotation = NumberRange.new(0, 360),
+		Size = ns({ { 0, 0.3 * s }, { 1, 1.6 * s } }),
+		Transparency = ns({ { 0, 0.2 }, { 1, 1 } }),
+		LightEmission = 1,
 		LightInfluence = 0,
 		ZOffset = 0.2,
-		Attributes = { TextureKey = "Starburst" },
-	}, aStar)
+		Attributes = { TextureKey = "EnergyRing" },
+	}, aJunction)
 	make("ParticleEmitter", {
 		Name = "StarGlow",
 		Texture = tex("Glow"),
 		Rate = 4,
 		Lifetime = NumberRange.new(0.6),
+		Speed = still,
 		LockedToPart = true,
 		Size = ns({ { 0, 1.5 * s }, { 0.5, 1.75 * s }, { 1, 1.5 * s } }),
-		Transparency = ns({ { 0, 1 }, { 0.3, 0.55 }, { 0.7, 0.55 }, { 1, 1 } }),
+		Transparency = ns({ { 0, 1 }, { 0.3, 0.45 }, { 0.7, 0.45 }, { 1, 1 } }),
 		LightEmission = 1,
 		LightInfluence = 0,
 		ZOffset = -0.3,
 		Attributes = { TextureKey = "Glow" },
-	}, aStar)
+	}, aJunction)
 	make("PointLight", {
 		Name = "StarLight",
 		Range = 10 * s,

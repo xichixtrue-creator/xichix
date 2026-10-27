@@ -15,7 +15,8 @@ local Workspace = game:GetService("Workspace")
 local TOOL_NAME = "Starburst Blade"
 local TAG = "StarburstSword"
 local SWORD_PARTS = { "Handle", "Shell", "GlowOrange", "GlowYellow", "FlameRed", "Sparkles", "Aura" }
--- every visible part glows: the sword should read as an effect, not a solid object
+-- The sword is drawn by effects (beams and particles). The meshes are only a faint Neon base
+-- underneath (Config.VFX.MeshTransparency), so nothing reads as a solid object.
 local COLOR_KEYS = {
 	Handle = "Handle",
 	Shell = "Ink",
@@ -245,6 +246,7 @@ if swordModel then
 		f = markerFrame(swordModel)
 	end
 
+	local meshTransparency = (Config.VFX and Config.VFX.MeshTransparency) or 0.8
 	for name, key in pairs(COLOR_KEYS) do
 		local p = parts[name]
 		if p then
@@ -254,6 +256,7 @@ if swordModel then
 			end
 			p.Material = Enum.Material.Neon
 			p.CastShadow = false
+			p.Transparency = meshTransparency
 			p:SetAttribute("ColorKey", key)
 		end
 	end
@@ -331,6 +334,10 @@ if swordModel then
 	local aTrailBase = attach(fx, "TrailBase", P.TrailBase)
 	local aHandleStart = attach(shell, "HandleStart", P.HandleStart)
 	local aHandleEnd = attach(shell, "HandleEnd", P.HandleEnd)
+	-- the two blended energy circles (round the eye and round the top of the handle) and where they meet
+	local aRingA = attach(shell, "RingA", P.RingA)
+	local aRingB = attach(shell, "RingB", P.RingB)
+	local aJunction = attach(shell, "Junction", P.Junction)
 
 	-- the painted look: the blade and handle drawn by camera-facing beams, exactly as in the reference
 	make("Beam", {
@@ -374,32 +381,72 @@ if swordModel then
 		FaceCamera = true,
 		LightEmission = 1,
 		LightInfluence = 0,
-		Transparency = NumberSequence.new(0.72),
+		Transparency = NumberSequence.new(0.55),
 		ZOffset = -0.2,
 		Attributes = { TextureKey = "Glow" },
 	}, fx)
 
+	-- energy flowing through the blade and handle, and the star's spikes as beams of light
+	local function energyBeam(name, a0, a1, key, w0, w1, extra, parent)
+		local props = {
+			Name = name,
+			Attachment0 = a0,
+			Attachment1 = a1,
+			Texture = tex(key),
+			TextureMode = Enum.TextureMode.Stretch,
+			Width0 = w0 * s,
+			Width1 = w1 * s,
+			FaceCamera = true,
+			Segments = 1,
+			LightEmission = 1,
+			LightInfluence = 0,
+			ZOffset = 0.22,
+			Attributes = { TextureKey = key },
+		}
+		for k, v in pairs(extra or {}) do
+			props[k] = v
+		end
+		return make("Beam", props, parent)
+	end
+	local flowing = { TextureMode = Enum.TextureMode.Wrap, TextureLength = 0.9 * s, TextureSpeed = 1.4, ZOffset = 0.18 }
+	energyBeam("BladeFlow", aBladeStart, aTip, "EnergyFlow", 0.24, 0.015, flowing, fx)
+	energyBeam("BladeCore", aBladeStart, aTip, "FlowStroke", 0.09, 0.014, nil, fx)
+	energyBeam("HandleFlow", aHandleStart, aHandleEnd, "EnergyFlow", 0.14, 0.014, flowing, shell)
+	energyBeam("HandleCore", aHandleStart, aHandleEnd, "FlowStroke", 0.06, 0.012, nil, shell)
+	for i, sb in ipairs(LAYOUT.spikeBeams) do
+		energyBeam(
+			"SpikeGlow" .. i,
+			attach(shell, "SpikeBase" .. i, sb.base),
+			attach(shell, "SpikeTip" .. i, sb.tip),
+			"EnergySpike",
+			sb.width,
+			sb.width,
+			{ ZOffset = 0.2, Attributes = { TextureKey = "EnergySpike", Spike = true } },
+			shell
+		)
+	end
+
 	local box = Enum.ParticleEmitterShape.Box
-	-- flame licks crawling up the blade (pre-coloured flipbook keeps its dark outlines)
+	-- soft energy wisps curling off the blade and dissolving
 	make("ParticleEmitter", {
-		Name = "FireLicks",
-		Texture = tex("FireLick"),
+		Name = "EnergyWisps",
+		Texture = tex("EnergyWisp"),
 		FlipbookLayout = Enum.ParticleFlipbookLayout.Grid4x4,
 		FlipbookMode = Enum.ParticleFlipbookMode.OneShot,
-		Rate = 12,
-		Lifetime = NumberRange.new(0.45, 0.7),
+		Rate = 14,
+		Lifetime = NumberRange.new(0.5, 0.8),
 		Speed = NumberRange.new(0.3, 0.8),
 		SpreadAngle = Vector2.new(180, 180),
 		Shape = box,
 		ShapeStyle = Enum.ParticleEmitterShapeStyle.Surface,
 		Acceleration = Vector3.new(0, 2.5, 0),
 		Drag = 2,
-		Size = ns({ { 0, 0.18 * s }, { 0.4, 0.3 * s }, { 1, 0.22 * s } }),
-		Rotation = NumberRange.new(-15, 15),
-		LightEmission = 0.25,
+		Size = ns({ { 0, 0.14 * s }, { 0.4, 0.26 * s }, { 1, 0.2 * s } }),
+		Rotation = NumberRange.new(-20, 20),
+		LightEmission = 1,
 		LightInfluence = 0,
 		ZOffset = 0.3,
-		Attributes = { TextureKey = "FireLick", Flipbook = true },
+		Attributes = { TextureKey = "EnergyWisp", Flipbook = true },
 	}, fx)
 	make("ParticleEmitter", {
 		Name = "Embers",
@@ -420,8 +467,10 @@ if swordModel then
 	make("ParticleEmitter", {
 		Name = "Twinkles",
 		Texture = tex("Twinkle"),
-		Rate = 5,
+		Rate = 9,
 		Lifetime = NumberRange.new(0.35, 0.6),
+		Speed = NumberRange.new(0.05, 0.25),
+		SpreadAngle = Vector2.new(180, 180),
 		Shape = box,
 		ShapeStyle = Enum.ParticleEmitterShapeStyle.Volume,
 		Rotation = NumberRange.new(0, 45),
@@ -449,35 +498,154 @@ if swordModel then
 		LightInfluence = 0,
 		Attributes = { TextureKey = "Spark" },
 	}, fx)
-	-- the star: shimmering starbursts and a hot glow around the eye
+	-- the star: two soft energy rings that overlap and melt into each other, one figure-8
+	-- stream of energy running round both (its bright heads are added in game by StarburstVFX),
+	-- the dark eye in the top ring, a white-hot core where the rings meet, fragments and pulses
+	local still = NumberRange.new(0)
+	local ringSize = 2 * LAYOUT.ringRadius / 0.62 * s -- the texture's bright line sits at 62% of its radius
+	for _, a in ipairs({ aRingA, aRingB }) do
+		make("ParticleEmitter", {
+			Name = "EnergyRing",
+			Texture = tex("EnergyRing"),
+			Rate = 7,
+			Lifetime = NumberRange.new(0.45, 0.6),
+			Speed = still,
+			LockedToPart = true,
+			Rotation = NumberRange.new(0, 360),
+			RotSpeed = NumberRange.new(-90, 90),
+			Size = ns({ { 0, ringSize * 0.92 }, { 0.5, ringSize }, { 1, ringSize * 1.08 } }),
+			Transparency = ns({ { 0, 1 }, { 0.3, 0.6 }, { 0.7, 0.68 }, { 1, 1 } }),
+			LightEmission = 1,
+			LightInfluence = 0,
+			ZOffset = 0.3,
+			Attributes = { TextureKey = "EnergyRing" },
+		}, a)
+	end
+	-- the body of the figure-8 energy stream round both circles: a closed ring of curved beams
+	-- (each attachment's X axis follows the path, so the beams join smoothly). StarburstVFX runs
+	-- a wave of light round it and sends bright streams chasing along it.
+	local nodes = LAYOUT.figure8Body -- closed: the last point repeats the first
+	local ring = {}
+	for i = 1, #nodes - 1 do
+		local prev = nodes[i == 1 and #nodes - 1 or i - 1]
+		local tangent = (toWorld(f, nodes[i + 1]) - toWorld(f, prev)).Unit
+		local a = make("Attachment", { Name = "Figure8_" .. i }, shell)
+		a.WorldCFrame = CFrame.fromMatrix(toWorld(f, nodes[i]), tangent, f.Y)
+		ring[i] = a
+	end
+	for i, a0 in ipairs(ring) do
+		local a1 = ring[i % #ring + 1]
+		local handleLength = (a1.WorldPosition - a0.WorldPosition).Magnitude / 3
+		make("Beam", {
+			Name = "Figure8Body",
+			Attachment0 = a0,
+			Attachment1 = a1,
+			Texture = tex("EnergyBand"),
+			TextureMode = Enum.TextureMode.Stretch,
+			Width0 = 0.14 * s,
+			Width1 = 0.14 * s,
+			CurveSize0 = handleLength,
+			CurveSize1 = handleLength,
+			Segments = 8,
+			FaceCamera = true,
+			LightEmission = 1,
+			LightInfluence = 0,
+			Transparency = NumberSequence.new(0.45),
+			ZOffset = 0.28,
+			Attributes = { TextureKey = "EnergyBand", Figure8 = i },
+		}, shell)
+	end
+	local eye = LAYOUT.eyeRadius / 0.3 * s -- the Void texture is fully dark out to 30% of its radius
 	make("ParticleEmitter", {
-		Name = "StarShimmer",
-		Texture = tex("Starburst"),
+		Name = "EyeVoid",
+		Texture = tex("Void"),
 		Rate = 3,
-		Lifetime = NumberRange.new(0.7, 0.9),
+		Lifetime = NumberRange.new(1.2),
+		Speed = still,
 		LockedToPart = true,
 		Rotation = NumberRange.new(0, 360),
-		RotSpeed = NumberRange.new(-25, 25),
-		Size = ns({ { 0, 1.0 * s }, { 0.5, 1.3 * s }, { 1, 1.15 * s } }),
-		Transparency = ns({ { 0, 1 }, { 0.25, 0.2 }, { 0.75, 0.3 }, { 1, 1 } }),
-		LightEmission = 0.2,
+		RotSpeed = NumberRange.new(-20, 20),
+		Size = ns({ { 0, eye * 0.95 }, { 0.5, eye }, { 1, eye * 0.95 } }),
+		Transparency = ns({ { 0, 1 }, { 0.25, 0 }, { 0.75, 0 }, { 1, 1 } }),
+		LightEmission = 0,
+		LightInfluence = 0,
+		ZOffset = 0.38, -- over the glow, so the eye stays dark
+		Attributes = { TextureKey = "Void" },
+	}, aRingA)
+	make("ParticleEmitter", {
+		Name = "RingCore",
+		Texture = tex("HotCore"),
+		Rate = 4,
+		Lifetime = NumberRange.new(0.6),
+		Speed = still,
+		LockedToPart = true,
+		Size = ns({ { 0, LAYOUT.ringRadius * 1.4 * s }, { 1, LAYOUT.ringRadius * 1.6 * s } }),
+		Transparency = ns({ { 0, 1 }, { 0.3, 0.55 }, { 0.7, 0.6 }, { 1, 1 } }),
+		LightEmission = 1,
+		LightInfluence = 0,
+		ZOffset = 0.24,
+		Attributes = { TextureKey = "HotCore" },
+	}, aRingB)
+	make("ParticleEmitter", {
+		Name = "JunctionCore",
+		Texture = tex("HotCore"),
+		Rate = 10,
+		Lifetime = NumberRange.new(0.3, 0.45),
+		Speed = still,
+		LockedToPart = true,
+		Size = ns({ { 0, 0.22 * s }, { 0.5, 0.3 * s }, { 1, 0.25 * s } }),
+		Transparency = ns({ { 0, 1 }, { 0.3, 0.25 }, { 0.7, 0.35 }, { 1, 1 } }),
+		LightEmission = 1,
+		LightInfluence = 0,
+		ZOffset = 0.35,
+		Attributes = { TextureKey = "HotCore" },
+	}, aJunction)
+	make("ParticleEmitter", {
+		Name = "Fragments",
+		Texture = tex("Spark"),
+		Orientation = Enum.ParticleOrientation.VelocityParallel,
+		Rate = 9,
+		Lifetime = NumberRange.new(0.25, 0.45),
+		Speed = NumberRange.new(0.8 * s, 2.2 * s),
+		SpreadAngle = Vector2.new(180, 180),
+		Drag = 4,
+		Size = ns({ { 0, 0.07 * s }, { 1, 0 } }),
+		Transparency = ns({ { 0, 0 }, { 1, 1 } }),
+		LightEmission = 1,
+		LightInfluence = 0,
+		ZOffset = 0.35,
+		Attributes = { TextureKey = "Spark" },
+	}, aJunction)
+	-- an energy ring pulsing out of the circles now and then (more of them while charging)
+	make("ParticleEmitter", {
+		Name = "StarShimmer",
+		Texture = tex("EnergyRing"),
+		Rate = 0.6,
+		Lifetime = NumberRange.new(0.6, 0.7),
+		Speed = still,
+		LockedToPart = true,
+		Rotation = NumberRange.new(0, 360),
+		Size = ns({ { 0, 0.3 * s }, { 1, 1.6 * s } }),
+		Transparency = ns({ { 0, 0.2 }, { 1, 1 } }),
+		LightEmission = 1,
 		LightInfluence = 0,
 		ZOffset = 0.2,
-		Attributes = { TextureKey = "Starburst" },
-	}, aStar)
+		Attributes = { TextureKey = "EnergyRing" },
+	}, aJunction)
 	make("ParticleEmitter", {
 		Name = "StarGlow",
 		Texture = tex("Glow"),
 		Rate = 4,
 		Lifetime = NumberRange.new(0.6),
+		Speed = still,
 		LockedToPart = true,
 		Size = ns({ { 0, 1.5 * s }, { 0.5, 1.75 * s }, { 1, 1.5 * s } }),
-		Transparency = ns({ { 0, 1 }, { 0.3, 0.55 }, { 0.7, 0.55 }, { 1, 1 } }),
+		Transparency = ns({ { 0, 1 }, { 0.3, 0.45 }, { 0.7, 0.45 }, { 1, 1 } }),
 		LightEmission = 1,
 		LightInfluence = 0,
 		ZOffset = -0.3,
 		Attributes = { TextureKey = "Glow" },
-	}, aStar)
+	}, aJunction)
 	make("PointLight", {
 		Name = "StarLight",
 		Range = 10 * s,

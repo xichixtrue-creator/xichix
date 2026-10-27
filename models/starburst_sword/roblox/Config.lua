@@ -3,12 +3,13 @@
 
 local Config = {}
 
--- Colours of the glowing (Neon) parts of the sword.
+-- Colours of the faint glowing (Neon) base under the effects. The look itself comes from
+-- the effect textures (see Config.VFX.MeshTransparency).
 Config.Colors = {
-	Yellow = Color3.fromRGB(255, 232, 140), -- hot core of the blade, ring, spike cores
-	Orange = Color3.fromRGB(255, 108, 24), -- blade band, halo, handle band
+	Yellow = Color3.fromRGB(255, 232, 140), -- hot core of the blade, spike cores
+	Orange = Color3.fromRGB(255, 108, 24), -- blade band, handle band
 	Red = Color3.fromRGB(226, 32, 16), -- red band, flame petals
-	Ink = Color3.fromRGB(44, 5, 4), -- the dark outlines (blade edge, spikes, eye)
+	Ink = Color3.fromRGB(44, 5, 4), -- the dark outlines (blade edge, spikes)
 	Handle = Color3.fromRGB(112, 22, 8),
 	Sparkle = Color3.fromRGB(255, 255, 255),
 	Aura = Color3.fromRGB(255, 118, 40), -- ForceField heat shimmer around the blade
@@ -54,8 +55,8 @@ Config.Sounds = {
 }
 
 -- Paste uploaded image IDs here to override the imported textures, e.g. Starburst = "rbxassetid://1".
--- Keys: BladePaint HandlePaint Streak SlashStrip Trail Starburst Crescent Dart Portal Swirl
--- RedSwirl FireLick Spark Ember Glow Twinkle
+-- Keys: BladePaint HandlePaint EnergyRing EnergySpike HotCore Void FlowStroke EnergyBand EnergyFlow EnergyWisp
+-- Streak SlashStrip Trail Starburst Crescent Dart Portal Swirl RedSwirl FireLick Spark Ember Glow Twinkle
 Config.Textures = {}
 
 Config.FallbackTextures = {
@@ -64,6 +65,15 @@ Config.FallbackTextures = {
 }
 
 Config.VFX = {
+	-- The sword is drawn by effects; the meshes underneath are only a faint glow.
+	-- 1 = effects only, 0 = solid meshes.
+	MeshTransparency = 0.8,
+	-- Energy flowing round the two blended circles at the star, as one figure-8 stream.
+	Figure8 = true,
+	FlowSpeed = 0.6, -- laps per second
+	FlowStrands = 3, -- streams chasing each other round the figure-8
+	FlowLifetime = 0.4, -- length of each stream's light trail (seconds)
+	FlowWidth = 0.06,
 	IdleRange = 140, -- idle extras only run when the camera is this close
 	Swirls = true, -- red swirl trails tracing the ribbons around the star
 	SwirlSpeed = 1.5, -- strokes per second

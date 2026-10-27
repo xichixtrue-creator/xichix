@@ -2,9 +2,10 @@
 Starburst Blade - Blender build script.
 
 Recreates the fiery sword from the reference sheet (item 3): a long needle
-blade that swells into a flame-shaped leaf, a starburst guard (black eye,
-glowing ring, seven tapered spikes, flame petals, curling ribbons) and a
-long tapering spike handle. Every outline below was measured from the
+blade that swells into a flame-shaped leaf, a starburst guard (dark eye in two
+blended energy circles, seven tapered spikes, flame petals, curling ribbons)
+and a long tapering spike handle. The meshes are only a faint base: the
+sword is drawn by layered energy effects (see render_previews and the Roblox installer). Every outline below was measured from the
 reference after rotating the sword upright around its star:
     u = pixels across (right +), v = pixels along (tip at v = -748, handle end at +382)
 
@@ -134,6 +135,14 @@ PETALS = [(-118, 95, 26, "red"), (-62, 80, 22, "orange"), (-18, 70, 20, "red"), 
 
 HANDLE_V = [20, 60, 100, 150, 200, 250, 300, 340, 382]
 HANDLE_R = pchip(HANDLE_V, [24, 24, 19, 15, 12, 9.5, 6, 3.5, 0.8])
+
+# The two blended energy circles: one round the eye, one round the top of the handle.
+# They overlap at the junction, and one stream of energy runs round both as a figure-8.
+RING_R = X(34)
+RING_A = (0.0, 0.0, 0.0)
+RING_B = (0.0, 0.0, Z(60))
+JUNCTION = (0.0, 0.0, Z(30))
+EYE_R = X(18)
 
 
 # ---------------------------------------------------------------- mesh helpers
@@ -356,6 +365,53 @@ def ribbon_paths():
     return out
 
 
+def _hermite(p0, m0, p1, m1, n):
+    out = []
+    for k in range(1, n):
+        t = k / n
+        out.append(p0 * (2 * t ** 3 - 3 * t ** 2 + 1) + m0 * (t ** 3 - 2 * t ** 2 + t) +
+                   p1 * (3 * t ** 2 - 2 * t ** 3) + m1 * (t ** 3 - t ** 2))
+    return out
+
+
+def figure8_path(step=5, leave=25):
+    """One closed stream of energy round both circles: anticlockwise round circle A, across
+    the junction, clockwise round circle B and back across, so the two crossings meet in an X
+    at the junction and the circles read as one flowing structure. Last point = first point.
+    `leave` is how far (degrees) before the circles' meeting point the stream cuts across."""
+    def on(centre, deg):
+        a = math.radians(deg)
+        return Vector((RING_R * math.cos(a), 0, centre[2] + RING_R * math.sin(a)))
+
+    def tangent(deg, sign):                    # sign +1 = anticlockwise, -1 = clockwise
+        a = math.radians(deg)
+        return Vector((-math.sin(a), 0, math.cos(a))) * sign
+
+    a0, a1 = -leave, 180 + leave               # arc on circle A (anticlockwise)
+    b0, b1 = leave, -180 - leave               # arc on circle B (clockwise)
+    arc_a = [on(RING_A, d) for d in range(a0, a1 + 1, step)]
+    arc_b = [on(RING_B, d) for d in range(b0, b1 - 1, -step)]
+    chord = (arc_b[0] - arc_a[-1]).length
+    n = max(2, round(chord / (RING_R * math.radians(step))))
+    m = chord * 0.9
+    cross_1 = _hermite(arc_a[-1], tangent(a1, 1) * m, arc_b[0], tangent(b0, -1) * m, n)
+    cross_2 = _hermite(arc_b[-1], tangent(b1, -1) * m, arc_a[0], tangent(a0, 1) * m, n)
+    loop = arc_a + cross_1 + arc_b + cross_2
+    loop.append(loop[0])
+    return [tuple(round(c, 4) for c in p) for p in loop]
+
+
+def spike_beams():
+    """(base, tip, width) of the energy beam drawn over each spike, in studs.
+    The width leaves room for the texture's soft glow round the spike."""
+    out = []
+    for tu, tv, w, _ in RAYS:
+        length = math.hypot(tu, tv)
+        base = (X(tu / length * 8), 0.0, Z(tv / length * 8))
+        out.append((base, (X(tu * 1.04), 0.0, Z(tv * 1.04)), X(w) * 1.9))
+    return out
+
+
 def build_star(shell, yellow, orange, red, sparkle):
     # rays: black shell spike + narrower, taller glowing core spike
     for tu, tv, w, has_core in RAYS:
@@ -364,43 +420,7 @@ def build_star(shell, yellow, orange, red, sparkle):
         spike(shell, bu, bv, tu, tv, w, 0.02 if has_core else 0.012, uv_x=(0.5, 1.0))
         if has_core:
             spike(yellow, bu, bv, tu, tv, w * 0.7, 0.026, core_frac=0.9)
-    # the black crack hooking out of the eye
-    spike(shell, -6, 6, 30, -40, 9, 0.034)
-    spike(shell, 4, -4, -34, 22, 7, 0.034)
-    # black eye
-    bm = bmesh.new()
-    bmesh.ops.create_uvsphere(bm, u_segments=16, v_segments=10, radius=X(20))
-    me = bpy.data.meshes.new("eye")
-    bm.to_mesh(me)
-    bm.free()
-    for v in me.vertices:
-        shell.add((v.co.x, v.co.y * 0.75, v.co.z), (0.75, 0.5))
-    base = len(shell.v) - len(me.vertices)
-    for p in me.polygons:
-        shell.face([base + i for i in p.vertices])
-    bpy.data.meshes.remove(me)
-    # glowing ring around the eye
-    seg, sides = 32, 8
-    rings = []
-    for k in range(seg):
-        a = 2 * math.pi * k / seg
-        c = Vector((math.cos(a), 0, math.sin(a))) * X(30)
-        out = c.normalized()
-        rings.append([yellow.add(c + out * (X(9) * math.cos(b)) + Vector((0, 0.042 * math.sin(b), 0)))
-                      for b in (2 * math.pi * j / sides for j in range(sides))])
-    for k in range(seg):
-        for j in range(sides):
-            yellow.face([rings[k][j], rings[k][(j + 1) % sides], rings[(k + 1) % seg][(j + 1) % sides], rings[(k + 1) % seg][j]])
-    # orange halo behind the ring (the reference's hot glow around the eye)
-    seg = 32
-    for face in (-1, 1):
-        inner = [orange.add((X(30) * math.cos(2 * math.pi * k / seg), face * 0.007, X(30) * math.sin(2 * math.pi * k / seg)))
-                 for k in range(seg)]
-        outer = [orange.add((X(54) * math.cos(2 * math.pi * k / seg), face * 0.007, X(54) * math.sin(2 * math.pi * k / seg)))
-                 for k in range(seg)]
-        for k in range(seg):
-            k1 = (k + 1) % seg
-            orange.oriented_face([inner[k], inner[k1], outer[k1], outer[k]], (0, face, 0), smooth=False)
+    # (the eye and its glowing rings are pure VFX now: see figure8_path() and the Roblox installer)
     # flame petals: flat curved tongues between the spikes
     for ang, length, width, colour in PETALS:
         mb = orange if colour == "orange" else red
@@ -551,9 +571,10 @@ def pbr_material(name, image=None, color=(1, 1, 1), metallic=0.0, rough=0.5, emi
     return mat
 
 
-def emission_material(name, image, strength=1.0, alpha=False, uv_rect=None):
+def emission_material(name, image, strength=1.0, alpha=False, uv_rect=None, additive=False):
     """Unlit, painted look: the texture is the colour, lights don't shade it.
-    Principled base colour = texture as well, so exporters still carry the texture."""
+    Principled base colour = texture as well, so exporters still carry the texture.
+    additive: light is added on top of what is behind (like Roblox LightEmission = 1)."""
     mat = bpy.data.materials.new(name)
     nt = nodes_of(mat)
     tex = nt.nodes.new("ShaderNodeTexImage")
@@ -570,7 +591,20 @@ def emission_material(name, image, strength=1.0, alpha=False, uv_rect=None):
     nt.links.new(tex.outputs["Color"], bsdf.inputs["Emission Color"])
     bsdf.inputs["Emission Strength"].default_value = strength
     out = nt.nodes.new("ShaderNodeOutputMaterial")
-    if alpha:
+    if additive:
+        em = nt.nodes.new("ShaderNodeEmission")
+        nt.links.new(tex.outputs["Color"], em.inputs["Color"])
+        mul = nt.nodes.new("ShaderNodeMath")
+        mul.operation = "MULTIPLY"
+        nt.links.new(tex.outputs["Alpha"], mul.inputs[0])
+        mul.inputs[1].default_value = strength
+        nt.links.new(mul.outputs[0], em.inputs["Strength"])
+        tr = nt.nodes.new("ShaderNodeBsdfTransparent")
+        add = nt.nodes.new("ShaderNodeAddShader")
+        nt.links.new(tr.outputs[0], add.inputs[0])
+        nt.links.new(em.outputs[0], add.inputs[1])
+        nt.links.new(add.outputs[0], out.inputs["Surface"])
+    elif alpha:
         tr = nt.nodes.new("ShaderNodeBsdfTransparent")
         mx = nt.nodes.new("ShaderNodeMixShader")
         nt.links.new(tex.outputs["Alpha"], mx.inputs[0])
@@ -585,6 +619,21 @@ def emission_material(name, image, strength=1.0, alpha=False, uv_rect=None):
 def set_material(ob, mat):
     ob.data.materials.clear()
     ob.data.materials.append(mat)
+
+
+def ghost(ob, opacity):
+    """See-through copy of the object's material (Roblox: Transparency = 1 - opacity)."""
+    mat = ob.active_material.copy()
+    nt = mat.node_tree
+    out = next(n for n in nt.nodes if n.type == "OUTPUT_MATERIAL")
+    src = out.inputs["Surface"].links[0].from_socket
+    tr = nt.nodes.new("ShaderNodeBsdfTransparent")
+    mx = nt.nodes.new("ShaderNodeMixShader")
+    mx.inputs[0].default_value = opacity
+    nt.links.new(tr.outputs[0], mx.inputs[1])
+    nt.links.new(src, mx.inputs[2])
+    nt.links.new(mx.outputs[0], out.inputs["Surface"])
+    set_material(ob, mat)
 
 
 # ---------------------------------------------------------------- build / export
@@ -636,6 +685,7 @@ def materials(imgs):
 
 
 BLADE_PAINT_W = 0.42          # studs across the blade beam (covers the widest part with margin)
+MESH_OPACITY = 0.2            # the meshes are a faint base under the effects (Roblox Transparency 0.8)
 HANDLE_PAINT_W = 0.22
 
 
@@ -667,6 +717,7 @@ def blade_paint(w=1024, h=192, seed=31):
     col = col * (1 - dark[..., None]) + np.array(ft.INK) * 1.4 * dark[..., None]
     sp = ft.sparkles(h, w, 60, seed, 1.8) * dark
     col = col * (1 - sp[..., None]) + sp[..., None]
+    shell = shell * ft._smooth(us, 0.0, 0.04)[None]         # melts into the energy circles at the star
     return np.concatenate([np.clip(col, 0, 1), shell[..., None]], axis=2).astype(np.float32)
 
 
@@ -682,6 +733,7 @@ def handle_paint(w=1024, h=96):
     col = col * (1 - band[..., None]) + np.array(ORANGE) * band[..., None]
     col = col * (1 - line[..., None]) + np.array(YELLOW) * line[..., None]
     fade = (0.6 + 0.4 * (1 - us))[None, :, None]
+    body = body * ft._smooth(us, 0.0, 0.07)[None]           # no hard edge where it leaves the circles
     return np.concatenate([np.clip(col * fade, 0, 1), body[..., None]], axis=2).astype(np.float32)
 
 
@@ -737,7 +789,12 @@ def layout(parts):
         "BladeStart": [0, 0, Z(-30)], "BladeTip": [0, 0, Z(V_TIP)], "BladeMid": [0, 0, Z(-380)],
         "TrailBase": [0, 0, Z(-90)], "Star": [0, 0, 0],
         "HandleStart": [0, 0, Z(24)], "HandleEnd": [0, 0, Z(V_END)], "Grip": [0, 0, Z(110)],
+        "RingA": list(RING_A), "RingB": list(RING_B), "Junction": list(JUNCTION),
     }, "spikes": [[X(u), 0, Z(v)] for u, v, _, _ in RAYS],
+       "spikeBeams": [{"base": [round(c, 4) for c in b], "tip": [round(c, 4) for c in t], "width": round(w, 4)}
+                      for b, t, w in spike_beams()],
+       "ringRadius": RING_R, "eyeRadius": EYE_R,
+       "figure8": figure8_path(),
        "ribbons": ribbon_paths(),
        "bladePaintWidth": BLADE_PAINT_W, "handlePaintWidth": HANDLE_PAINT_W,
        "bladeVolume": {"centre": [0, 0, (Z(-60) + Z(V_TIP + 40)) / 2], "size": [X(80), 0.1, Z(V_TIP + 40) - Z(-60)]}}
@@ -782,6 +839,7 @@ def render_previews(parts, carriers):
     sc = bpy.context.scene
     sc.cycles.samples = 64
     sc.cycles.use_denoising = True
+    sc.cycles.transparent_max_bounces = 128
     sc.view_settings.view_transform = "Standard"
     world = bpy.data.worlds.new("Grey")
     sc.world = world
@@ -809,7 +867,7 @@ def render_previews(parts, carriers):
     sc.collection.objects.link(cam)
     sc.camera = cam
 
-    def shot(name, loc, target, res, ortho=None, lens=50):
+    def shot(name, loc, target, res, ortho=None, lens=50, glow=0.45):
         cam.location = loc
         cam.rotation_euler = (Vector(target) - Vector(loc)).to_track_quat("-Z", "Y").to_euler()
         face_camera()
@@ -821,30 +879,57 @@ def render_previews(parts, carriers):
         path = os.path.join(PREVIEWS, name + ".png")
         sc.render.filepath = path
         bpy.ops.render.render(write_still=True)
-        bloom(path)
+        bloom(path, strength=glow, threshold=0.8 if glow < 0.6 else 0.62)
         print("rendered", path)
 
     fx_imgs = {name: bpy.data.images.get(f"fx_{name.lower()}") for name in ft.VFX}
     overlays = []
 
-    def card(name, image, centre, axis, width, length, mat=None):
-        """Plane centred on `centre`, long side along `axis`, turned to face the camera."""
-        ob = bpy.data.objects.new(name, bpy.data.meshes.new(name))
+    def card(name, image, centre, axis, width, length, mat=None, lift=0.06, taper=1.0, additive=True,
+             strength=1.0, uv_rect=None, u_tiles=1.0, segs=8):
+        """Plane centred on `centre`, long side along `axis` (u = 0 at the -axis end), turned to
+        face the camera and lifted `lift` towards it. taper = width at the +axis end / width.
+        additive = adds light like Roblox's LightEmission 1; otherwise alpha-blended."""
         mb = MB()
-        q = [mb.add((-length / 2, -width / 2, 0), (0, 0)), mb.add((length / 2, -width / 2, 0), (1, 0)),
-             mb.add((length / 2, width / 2, 0), (1, 1)), mb.add((-length / 2, width / 2, 0), (0, 1))]
-        mb.face(q, smooth=False)
-        tmp = mb.to_object(name + "_m")
-        ob.data = tmp.data
-        bpy.data.objects.remove(tmp)
-        sc.collection.objects.link(ob)
-        set_material(ob, mat or emission_material(name, image, alpha=True))
-        overlays.append((ob, Vector(centre), Vector(axis).normalized()))
+        rows = []
+        for k in range(segs + 1):
+            f = k / segs
+            hw = width / 2 * (1 + (taper - 1) * f)
+            x = -length / 2 + length * f
+            rows.append((mb.add((x, -hw, 0), (f * u_tiles, 0)), mb.add((x, hw, 0), (f * u_tiles, 1))))
+        for k in range(segs):
+            mb.face([rows[k][0], rows[k + 1][0], rows[k + 1][1], rows[k][1]], smooth=False)
+        ob = mb.to_object(name)
+        set_material(ob, mat or emission_material(name, image, strength, alpha=True, uv_rect=uv_rect,
+                                                  additive=additive))
+        overlays.append((ob, Vector(centre), Vector(axis).normalized(), lift))
+        return ob
+
+    def strip(name, pts, width_fn, mat, lift=0.07, u_fn=None):
+        """Ribbon in the guard plane along `pts`; u runs 1 (start) -> 0 (end) unless u_fn says otherwise."""
+        pts = [Vector(p) for p in pts]
+        n = len(pts)
+        mb = MB()
+        L, R = [], []
+        off = Vector((0, -lift, 0))
+        for k, p in enumerate(pts):
+            tan = (pts[min(n - 1, k + 1)] - pts[max(0, k - 1)]).normalized()
+            side = Vector((0, 1, 0)).cross(tan).normalized()
+            f = k / (n - 1)
+            w = width_fn(f)
+            u = u_fn(f) if u_fn else 1 - f
+            L.append(mb.add(p - side * w + off, (u, 0)))
+            R.append(mb.add(p + side * w + off, (u, 1)))
+        for k in range(n - 1):
+            mb.face([L[k], R[k], R[k + 1], L[k + 1]], smooth=False)
+        ob = mb.to_object(name)
+        set_material(ob, mat)
+        overlays.append((ob, None, None, 0))
         return ob
 
     def face_camera():
-        for ob, centre, axis in overlays:
-            if centre is None:                          # swirl strokes stay in the guard plane
+        for ob, centre, axis, lift in overlays:
+            if centre is None:                          # strips stay in the guard plane
                 continue
             to_cam = (cam.location - centre).normalized()
             if axis.length == 0:                       # sprite: square facing the camera
@@ -855,57 +940,141 @@ def render_previews(parts, carriers):
                 y = to_cam.cross(x).normalized()
             z = x.cross(y)
             ob.matrix_world = Matrix((x, y, z)).transposed().to_4x4()
-            ob.location = centre + to_cam * 0.06
+            ob.location = centre + to_cam * lift
 
-    blade_len = Z(V_TIP) - Z(-30)
-    paint = {"BladePaint": bpy.data.images["fx_bladepaint"], "HandlePaint": bpy.data.images["fx_handlepaint"]}
-    card("FX_BladePaint", paint["BladePaint"], (0, 0, Z(-30) + blade_len / 2), (0, 0, 1), BLADE_PAINT_W, blade_len)
-    hl = Z(24) - Z(V_END)
-    card("FX_HandlePaint", paint["HandlePaint"], (0, 0, Z(24) - hl / 2), (0, 0, -1), HANDLE_PAINT_W, hl)
-    card("FX_Glow", fx_imgs["Glow"], (0, 0, 0), (0, 0, 0), 1.7, 1.7)
-    card("FX_Starburst", fx_imgs["Starburst"], (0, 0, 0), (0, 0, 0), 1.25, 1.25)
+    def flip_cell(frame):
+        return (frame % 4 * 0.25, 0.75 - frame // 4 * 0.25, 0.25, 0.25)
+
+    loop = [Vector(p) for p in figure8_path()]
+    seg_len = [(loop[k + 1] - loop[k]).length for k in range(len(loop) - 1)]
+    loop_len = sum(seg_len)
+
+    def loop_at(s):
+        """Point and direction on the figure-8 at arc-length fraction s (wraps)."""
+        t = (s % 1.0) * loop_len
+        for k, seg in enumerate(seg_len):
+            if t <= seg or k == len(seg_len) - 1:
+                return loop[k].lerp(loop[k + 1], min(1.0, t / seg) if seg > 0 else 0), (loop[k + 1] - loop[k]).normalized()
+            t -= seg
+        return loop[0], Vector((1, 0, 0))
+
     rng = np.random.default_rng(21)
-    for k in range(6):
-        v = float(rng.uniform(-420, -100))
-        side = (SHELL_R(v) if k % 2 else SHELL_L(v)) * 1.1
-        frame = int(rng.integers(3, 10))
-        cell = (frame % 4 * 0.25, 0.75 - frame // 4 * 0.25, 0.25, 0.25)
-        size = float(rng.uniform(0.14, 0.22))
-        card(f"FX_Flame{k}", None, (X(side), 0, Z(v) + size * 0.3), (0, 0, 0), size, size,
-             mat=emission_material(f"FX_Flame{k}", fx_imgs["FireLick"], alpha=True, uv_rect=cell))
+    ring_size = 2 * RING_R / 0.62              # EnergyRing's bright line sits at 62% of its radius
+    centre_8 = (Vector(RING_A) + Vector(RING_B)) / 2
+    blade_len = Z(V_TIP) - Z(-30)
+    blade_mid = (0, 0, Z(-30) + blade_len / 2)
+    hl = Z(24) - Z(V_END)
+    handle_mid = (0, 0, Z(24) - hl / 2)
 
+    # -- one big soft bloom the whole structure sits in
+    card("FX_Bloom", fx_imgs["Glow"], tuple(centre_8), (0, 0, 0), 1.7, 1.7, lift=0.02, strength=0.75)
+    card("FX_BladeBloom", fx_imgs["Glow"], (0, 0, Z(-340)), (0, 0, 1), 0.9, 3.3, lift=0.025, taper=0.3,
+         strength=0.5)
+
+    # -- blade and handle: painted from the reference, with energy flowing through them
+    card("FX_BladePaint", bpy.data.images["fx_bladepaint"], blade_mid, (0, 0, 1), BLADE_PAINT_W, blade_len,
+         lift=0.07, additive=False, strength=1.1)
+    card("FX_HandlePaint", bpy.data.images["fx_handlepaint"], handle_mid, (0, 0, -1), HANDLE_PAINT_W, hl,
+         lift=0.07, additive=False, strength=1.1)
+    card("FX_BladeFlow", fx_imgs["EnergyFlow"], blade_mid, (0, 0, 1), 0.24, blade_len, lift=0.085, taper=0.06,
+         strength=1.3, u_tiles=3.2)
+    card("FX_BladeCore", fx_imgs["FlowStroke"], blade_mid, (0, 0, 1), 0.09, blade_len, lift=0.095, taper=0.15,
+         strength=1.8)
+    card("FX_HandleFlow", fx_imgs["EnergyFlow"], handle_mid, (0, 0, -1), 0.14, hl, lift=0.085, taper=0.1,
+         strength=1.0, u_tiles=1.6)
+    card("FX_HandleCore", fx_imgs["FlowStroke"], handle_mid, (0, 0, -1), 0.06, hl, lift=0.095, taper=0.2,
+         strength=1.5)
+
+    # -- the star's spikes as beams of light
+    for i, (b, t, w) in enumerate(spike_beams()):
+        b, t = Vector(b), Vector(t)
+        card(f"FX_Spike{i}", fx_imgs["EnergySpike"], tuple((b + t) / 2), tuple(t - b), w, (t - b).length,
+             lift=0.09, strength=1.4)
+    for i, (ang, length, width, _) in enumerate(PETALS):
+        a = math.radians(ang)
+        d = Vector((math.cos(a), 0, -math.sin(a)))
+        card(f"FX_Petal{i}", fx_imgs["EnergyWisp"], tuple(d * X(36 + length * 0.45)), (0, 0, 0), X(width) * 2.6,
+             X(width) * 2.6, lift=0.088, strength=0.9, uv_rect=flip_cell(int(rng.integers(1, 7))))
+
+    # -- the two blended circles: overlapping soft rings, one figure-8 stream of energy
+    #    running round both, and a hot core where they meet
+    card("FX_Void", fx_imgs["Void"], RING_A, (0, 0, 0), EYE_R / 0.3, EYE_R / 0.3, lift=0.128, additive=False)
+    card("FX_RingInnerB", fx_imgs["HotCore"], RING_B, (0, 0, 0), RING_R * 1.5, RING_R * 1.5, lift=0.1, strength=0.7)
+    card("FX_RingA", fx_imgs["EnergyRing"], RING_A, (0, 0, 0), ring_size, ring_size, lift=0.11, strength=0.6)
+    card("FX_RingB", fx_imgs["EnergyRing"], RING_B, (0, 0, 0), ring_size, ring_size, lift=0.112, strength=0.6)
+    band = fx_imgs["EnergyBand"]
+    strip("FX_Figure8Body", loop, lambda f: 0.07, emission_material("FX_Figure8Body", band, 0.8, additive=True),
+          lift=0.113, u_fn=lambda f: 0.5)
+    strip("FX_Figure8", loop, lambda f: 0.022, emission_material("FX_Figure8", band, 1.2, additive=True),
+          lift=0.115, u_fn=lambda f: 0.5)
+    for k in range(7):                                         # wisps peeling off the stream
+        p, _ = loop_at(k / 7 + 0.04)
+        size = float(rng.uniform(0.09, 0.14))
+        card(f"FX_LoopWisp{k}", fx_imgs["EnergyWisp"], tuple(p), (0, 0, 0), size, size, lift=0.117, strength=0.8,
+             uv_rect=flip_cell(int(rng.integers(3, 9))))
+    head_mat = emission_material("FX_FlowHead", fx_imgs["FlowStroke"], 2.4, additive=True)
+    for i in range(3):
+        head = i / 3 + 0.07
+        pts = []
+        for k in range(64):
+            f = k / 63
+            p, d = loop_at(head - 0.42 * (1 - f))
+            side = Vector((0, 1, 0)).cross(d).normalized()
+            pts.append(p + side * 0.011 * math.sin(2 * math.pi * (f * 2 + i / 3)))
+        strip(f"FX_Flow{i}", pts, lambda f: 0.006 + 0.022 * f ** 0.8, head_mat, lift=0.12 + 0.002 * i)
+    card("FX_Junction", fx_imgs["HotCore"], JUNCTION, (0, 0, 0), 0.26, 0.26, lift=0.124, strength=2.0)
+    card("FX_JunctionWide", fx_imgs["HotCore"], JUNCTION, (0, 0, 0), 0.5, 0.5, lift=0.122, strength=0.45)
+    for k in range(10):                                       # energy fragments flying off the junction
+        a = 2 * math.pi * k / 10 + float(rng.uniform(-0.25, 0.25))
+        d = Vector((math.cos(a), 0, math.sin(a)))
+        r = float(rng.uniform(0.2, 0.36))
+        ln = float(rng.uniform(0.07, 0.13))
+        card(f"FX_Fragment{k}", fx_imgs["FlowStroke"], tuple(Vector(JUNCTION) + d * r), tuple(-d), 0.022, ln,
+             lift=0.135, strength=2.0)
+
+    # -- wisps curling off the blade, and sparkle dust over everything
+    for k in range(8):
+        v = float(rng.uniform(-470, -70))
+        side = (SHELL_R(v) if k % 2 else SHELL_L(v)) * 1.08
+        size = float(rng.uniform(0.13, 0.22))
+        card(f"FX_Wisp{k}", fx_imgs["EnergyWisp"], (X(side), 0, Z(v) + size * 0.25), (0, 0, 0), size, size,
+             lift=0.1, strength=1.0, uv_rect=flip_cell(int(rng.integers(2, 10))))
+    dust = []
+    for k in range(28):
+        p, _ = loop_at(float(rng.uniform(0, 1)))
+        dust.append(p + Vector((float(rng.normal(0, 0.03)), 0, float(rng.normal(0, 0.03)))))
+    for k in range(18):
+        v = float(rng.uniform(-650, -40))
+        dust.append(Vector((X(float(rng.uniform(SHELL_L(v), SHELL_R(v))) * 1.2), 0, Z(v))))
+    for b, t, _ in spike_beams():
+        for f in rng.uniform(0.3, 0.95, 2):
+            dust.append(Vector(b).lerp(Vector(t), float(f)) + Vector((0, 0, float(rng.normal(0, 0.02)))))
+    for k, p in enumerate(dust):
+        size = float(rng.uniform(0.025, 0.065))
+        card(f"FX_Dust{k}", fx_imgs["Twinkle"], tuple(p), (0, 0, 0), size, size, lift=0.14, strength=2.0)
+
+    # -- the curling ribbons, as red swirl strokes
     swirl_mat = emission_material("FX_RedSwirl", fx_imgs["RedSwirl"], alpha=True)
     for i, path in enumerate(ribbon_paths()):
-        pts = [Vector(p) for p in path]
-        mb = MB()
-        L, R = [], []
-        n = len(pts)
-        for k, p in enumerate(pts):
-            tan = (pts[min(n - 1, k + 1)] - pts[max(0, k - 1)]).normalized()
-            side = Vector((0, 1, 0)).cross(tan).normalized()
-            f = k / (n - 1)                                   # 0 = start (tail), 1 = head
-            w = 0.012 + 0.035 * math.sin(math.pi * min(1.0, f * 1.1)) ** 0.8
-            u = 1 - f
-            L.append(mb.add(p - side * w + Vector((0, -0.07, 0)), (u, 0)))
-            R.append(mb.add(p + side * w + Vector((0, -0.07, 0)), (u, 1)))
-        for k in range(n - 1):
-            mb.face([L[k], R[k], R[k + 1], L[k + 1]], smooth=False)
-        ob = mb.to_object(f"FX_Swirl{i}")
-        set_material(ob, swirl_mat)
-        overlays.append((ob, None, None))
+        strip(f"FX_Swirl{i}", path, lambda f: 0.012 + 0.035 * math.sin(math.pi * min(1.0, f * 1.1)) ** 0.8,
+              swirl_mat, lift=0.07)
 
     def show_overlays(on):
-        for ob, _, _ in overlays:
+        for ob, _, _, _ in overlays:
             ob.hide_render = not on
 
-    # front, orthographic, same framing as the reference (for the side-by-side check)
+    # the bare meshes, then the sword as it looks in game: the meshes are only a faint base
+    # (Config.VFX.MeshTransparency) under the energy layers
     show_overlays(False)
     shot("model_front", (0, -10, Z(-183)), (0, 0, Z(-183)), (500, 1170), ortho=X(1170))
     shot("model_star", (0.7, -2.4, 0.15), (0, 0, 0.0), (1100, 1100), lens=50)
+    for name, ob in parts.items():
+        if name != "Aura":
+            ghost(ob, MESH_OPACITY)
     show_overlays(True)
-    shot("front", (0, -10, Z(-183)), (0, 0, Z(-183)), (500, 1170), ortho=X(1170))
-    shot("hero", (2.2, -6.5, 0.9), (0, 0, 0.75), (900, 1400), lens=50)
-    shot("star_detail", (0.7, -2.4, 0.15), (0, 0, 0.0), (1100, 1100), lens=50)
+    shot("front", (0, -10, Z(-183)), (0, 0, Z(-183)), (500, 1170), ortho=X(1170), glow=0.7)
+    shot("hero", (2.2, -6.5, 0.9), (0, 0, 0.75), (900, 1400), lens=50, glow=0.7)
+    shot("star_detail", (0.7, -2.4, 0.15), (0, 0, -0.06), (1100, 1100), lens=50, glow=0.7)
 
     # the special attack, laid out like the reference sheet: streak from the sky into a
     # starburst, a portal opening behind it, flames on the ground, darts flying out,
@@ -913,27 +1082,27 @@ def render_previews(parts, carriers):
     impact = Vector((2.6, -1.0, -1.4))
     sky = Vector((-1.6, 2.5, 6.0))
     d = (impact - sky)
-    card("FX_SkyStreak", fx_imgs["Streak"], tuple(sky + d / 2), tuple(-d), 3.0, d.length)
-    card("FX_Portal", fx_imgs["Portal"], tuple(impact + Vector((0.4, 1.2, 1.4))), (0, 0, 0), 4.4, 4.4)
-    card("FX_PortalSwirl", fx_imgs["Swirl"], tuple(impact + Vector((0.3, 0.9, 1.4))), (0, 0, 0), 5.0, 5.0)
-    card("FX_Impact", fx_imgs["Starburst"], tuple(impact + Vector((0, -0.3, 0.3))), (0, 0, 0), 4.2, 4.2)
-    card("FX_ImpactGlow", fx_imgs["Glow"], tuple(impact + Vector((0, -0.2, 0.3))), (0, 0, 0), 5.5, 5.5)
+    painted = {"additive": False}
+    card("FX_SkyStreak", fx_imgs["Streak"], tuple(sky + d / 2), tuple(-d), 3.0, d.length, **painted)
+    card("FX_Portal", fx_imgs["Portal"], tuple(impact + Vector((0.4, 1.2, 1.4))), (0, 0, 0), 4.4, 4.4, **painted)
+    card("FX_PortalSwirl", fx_imgs["Swirl"], tuple(impact + Vector((0.3, 0.9, 1.4))), (0, 0, 0), 5.0, 5.0,
+         **painted)
+    card("FX_Impact", fx_imgs["Starburst"], tuple(impact + Vector((0, -0.3, 0.3))), (0, 0, 0), 4.2, 4.2, **painted)
+    card("FX_ImpactGlow", fx_imgs["Glow"], tuple(impact + Vector((0, -0.2, 0.3))), (0, 0, 0), 5.5, 5.5, **painted)
     rng = np.random.default_rng(3)
     for k in range(12):
         a = 2 * math.pi * k / 12 + float(rng.uniform(-0.2, 0.2))
         pos = impact + Vector((math.cos(a) * 1.9, math.sin(a) * 1.0, -0.15))
-        frame = int(rng.integers(2, 9))
-        cell = (frame % 4 * 0.25, 0.75 - frame // 4 * 0.25, 0.25, 0.25)
         size = float(rng.uniform(0.8, 1.3))
-        card(f"FX_Ground{k}", None, tuple(pos + Vector((0, 0, size * 0.35))), (0, 0, 0), size, size,
-             mat=emission_material(f"FX_Ground{k}", fx_imgs["FireLick"], alpha=True, uv_rect=cell))
+        card(f"FX_Ground{k}", fx_imgs["FireLick"], tuple(pos + Vector((0, 0, size * 0.35))), (0, 0, 0), size, size,
+             uv_rect=flip_cell(int(rng.integers(2, 9))), **painted)
     for k in range(8):
         a = 2 * math.pi * k / 8 + 0.3
         dvec = Vector((math.cos(a), -0.3, math.sin(a) * 0.8 + 0.3)).normalized()
         start = impact + dvec * 1.6
-        card(f"FX_Dart{k}", fx_imgs["Dart"], tuple(start + dvec * 0.55), tuple(dvec), 0.35, 1.1)
-    card("FX_Crescent", fx_imgs["Crescent"], (0.6, -0.8, 1.6), (0, 0, 0), 4.6, 4.6)
-    shot("vfx_special", (3.2, -11.5, 1.8), (1.0, 0, 0.4), (1400, 1000), lens=38)
+        card(f"FX_Dart{k}", fx_imgs["Dart"], tuple(start + dvec * 0.55), tuple(dvec), 0.35, 1.1, **painted)
+    card("FX_Crescent", fx_imgs["Crescent"], (0.6, -0.8, 1.6), (0, 0, 0), 4.6, 4.6, **painted)
+    shot("vfx_special", (3.2, -11.5, 1.8), (1.0, 0, 0.4), (1400, 1000), lens=38, glow=0.55)
 
 
 def main(render=False):

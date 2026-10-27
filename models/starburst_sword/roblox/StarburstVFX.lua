@@ -1,7 +1,8 @@
 -- Starburst Blade effects. Lives in ReplicatedStorage.StarburstSword.StarburstVFX.
 -- Clients play everything; the server only calls ApplyColors / ComputeImpact.
--- Textures are pre-coloured (fire with dark outlines, like the reference sheet), so
--- most effects use a white tint and low LightEmission to keep the outlines dark.
+-- The sword itself is drawn by additive energy layers (LightEmission 1); the attack
+-- textures are pre-coloured (fire with dark outlines, like the reference sheet), so those
+-- effects use a white tint and low LightEmission to keep the outlines dark.
 
 local Debris = game:GetService("Debris")
 local Lighting = game:GetService("Lighting")
@@ -14,6 +15,15 @@ local Config = require(Folder:WaitForChild("Config"))
 local Layout = require(Folder:WaitForChild("Layout"))
 
 local VFX = {}
+
+-- Config.VFX value with a default, so a Config kept from an older install still works.
+local function opt(key, default)
+	local v = Config.VFX[key]
+	if v == nil then
+		return default
+	end
+	return v
+end
 
 -- ---------------------------------------------------------------- lookups
 
@@ -35,13 +45,20 @@ function VFX.Texture(key)
 	return Config.FallbackTextures[key] or Config.FallbackTextures.Default, true
 end
 
--- Applies Config.Colors to parts tagged with a ColorKey attribute and refreshes
--- every emitter / beam / trail tagged with a TextureKey attribute.
+-- Applies Config.Colors (and the mesh transparency) to parts tagged with a ColorKey
+-- attribute and refreshes every emitter / beam / trail tagged with a TextureKey attribute.
 function VFX.ApplyColors(tool)
+	local meshTransparency = opt("MeshTransparency", 0.8)
 	for _, inst in ipairs(tool:GetDescendants()) do
 		local colorKey = inst:GetAttribute("ColorKey")
 		if colorKey and Config.Colors[colorKey] and (inst:IsA("BasePart") or inst:IsA("Light")) then
 			inst.Color = Config.Colors[colorKey]
+		end
+		if colorKey and colorKey ~= "Aura" and inst:IsA("BasePart") then
+			inst.Transparency = meshTransparency
+		end
+		if inst:IsA("Beam") and inst:GetAttribute("Figure8") then
+			inst.Enabled = opt("Figure8", true)
 		end
 		local key = inst:GetAttribute("TextureKey")
 		if key and (inst:IsA("ParticleEmitter") or inst:IsA("Trail") or inst:IsA("Beam")) then
@@ -582,18 +599,29 @@ function VFX.StartIdle(tool)
 		return
 	end
 	local scale = tool:GetAttribute("SwordScale") or 1
-	local state = { swirls = {}, nextDart = os.clock() + 1, nextPulse = os.clock() + 2 }
+	local state = {
+		swirls = {},
+		flows = {},
+		spikes = {},
+		body = {},
+		nextDart = os.clock() + 1,
+		nextPulse = os.clock() + 2,
+	}
+	local function polyline(raw)
+		local path, lengths, total = {}, {}, 0
+		for _, p in ipairs(raw) do
+			table.insert(path, layoutToLocal(star, p, scale))
+		end
+		for k = 1, #path - 1 do
+			lengths[k] = (path[k + 1] - path[k]).Magnitude
+			total += lengths[k]
+		end
+		return path, lengths, total
+	end
 	if Config.VFX.Swirls then
 		local tex = VFX.Texture("RedSwirl")
 		for i, raw in ipairs(Layout.Ribbons) do
-			local path, lengths, total = {}, {}, 0
-			for _, p in ipairs(raw) do
-				table.insert(path, layoutToLocal(star, p, scale))
-			end
-			for k = 1, #path - 1 do
-				lengths[k] = (path[k + 1] - path[k]).Magnitude
-				total += lengths[k]
-			end
+			local path, lengths, total = polyline(raw)
 			local a0, a1 = Instance.new("Attachment"), Instance.new("Attachment")
 			a0.Name, a1.Name = "Swirl" .. i .. "A", "Swirl" .. i .. "B"
 			a0.Parent, a1.Parent = shell, shell
@@ -622,6 +650,66 @@ function VFX.StartIdle(tool)
 			})
 		end
 	end
+	-- One stream of energy round both circles at the star, so they read as one structure.
+	-- Its glowing body is the ring of curved "Figure8Body" beams the installer built (a wave
+	-- of light runs round it below); here a few bright heads chase each other round the same
+	-- closed path, braiding as they go and shedding sparkle dust.
+	local figure8 = Layout.Figure8
+	if opt("Figure8", true) and figure8 and #figure8 > 2 then
+		local path, lengths, total = polyline(figure8)
+		local strands = math.max(1, math.floor(opt("FlowStrands", 3)))
+		local flowTex, dustTex = VFX.Texture("FlowStroke"), VFX.Texture("Twinkle")
+		for i = 1, strands do
+			local a0, a1 = Instance.new("Attachment"), Instance.new("Attachment")
+			a0.Name, a1.Name = "Flow" .. i .. "A", "Flow" .. i .. "B"
+			a0.Parent, a1.Parent = shell, shell
+			local trail = Instance.new("Trail")
+			trail.Attachment0, trail.Attachment1 = a0, a1
+			trail.Texture = flowTex
+			trail.TextureMode = Enum.TextureMode.Stretch
+			trail.Lifetime = opt("FlowLifetime", 0.4)
+			trail.MinLength = 0.01
+			trail.FaceCamera = true
+			trail.LightEmission = 1
+			trail.LightInfluence = 0
+			trail.WidthScale = ns({ { 0, 1 }, { 1, 0.2 } })
+			trail.Transparency = ns({ { 0, 0 }, { 1, 1 } })
+			trail.Enabled = false
+			trail.Parent = shell
+			local dust = newEmitter(a1, {
+				Texture = dustTex,
+				Rate = 16,
+				Lifetime = NumberRange.new(0.25, 0.5),
+				Speed = NumberRange.new(0.1 * scale, 0.4 * scale),
+				SpreadAngle = Vector2.new(180, 180),
+				Drag = 3,
+				Rotation = NumberRange.new(0, 45),
+				Size = ns({ { 0, 0 }, { 0.3, 0.06 * scale }, { 1, 0 } }),
+				LightEmission = 1,
+				ZOffset = 0.4,
+			})
+			table.insert(state.flows, {
+				a0 = a0,
+				a1 = a1,
+				trail = trail,
+				dust = dust,
+				path = path,
+				lengths = lengths,
+				total = total,
+				phase = (i - 1) / strands + 0.1,
+			})
+		end
+	end
+	for _, d in ipairs(shell:GetChildren()) do
+		if d:IsA("Beam") and d:GetAttribute("Spike") then
+			table.insert(state.spikes, d)
+		elseif d:IsA("Beam") and d:GetAttribute("Figure8") then
+			table.insert(state.body, d)
+		end
+	end
+	table.sort(state.body, function(a, b)
+		return a:GetAttribute("Figure8") < b:GetAttribute("Figure8")
+	end)
 	state.conn = RunService.RenderStepped:Connect(function()
 		if not (tool.Parent and shell.Parent) then
 			VFX.StopIdle(tool)
@@ -646,8 +734,35 @@ function VFX.StartIdle(tool)
 			sw.trail.Enabled = drawing and s >= sw.last
 			sw.last = s
 		end
+		-- the figure-8 path is closed, so the streams never jump and their trails stay on
+		local flowSpeed, flowWidth = opt("FlowSpeed", 0.6), opt("FlowWidth", 0.06) * scale
+		for _, fl in ipairs(state.flows) do
+			if near then
+				local s = (now * flowSpeed + fl.phase) % 1
+				local pos, dir = along(fl.path, fl.lengths, fl.total, s)
+				local side = dir.Magnitude > 1e-4 and dir.Unit:Cross(normal) or Vector3.xAxis
+				local braid = side * (0.011 * scale) * math.sin(2 * math.pi * (s * 4 + fl.phase))
+				fl.a0.Position = pos + braid - side * flowWidth * 0.5
+				fl.a1.Position = pos + braid + side * flowWidth * 0.5
+			end
+			fl.trail.Enabled = near
+			fl.dust.Enabled = near
+		end
 		if not near then
 			return
+		end
+		-- a wave of light runs round the figure-8's body, moving with the streams
+		local count = #state.body
+		local function bodyTransparency(k)
+			return 0.45 - 0.25 * math.sin(2 * math.pi * (k / count - now * flowSpeed))
+		end
+		for i, beam in ipairs(state.body) do
+			beam.Transparency = NumberSequence.new(bodyTransparency(i - 1), bodyTransparency(i))
+		end
+		-- the spikes flicker like live energy
+		for i, beam in ipairs(state.spikes) do
+			local f = 0.5 + 0.5 * math.sin(now * 6 + i * 1.9) * math.sin(now * 2.3 + i)
+			beam.Transparency = NumberSequence.new(0.3 * f)
 		end
 		if Config.VFX.Darts and now >= state.nextDart and #Layout.Spikes > 0 then
 			state.nextDart = now + 1.2 + math.random() * 1.4
@@ -680,6 +795,16 @@ function VFX.StopIdle(tool)
 		sw.trail:Destroy()
 		sw.a0:Destroy()
 		sw.a1:Destroy()
+	end
+	for _, fl in ipairs(state.flows) do
+		fl.trail:Destroy()
+		fl.a0:Destroy()
+		fl.a1:Destroy() -- also removes the dust emitter riding on it
+	end
+	for _, beam in ipairs(state.spikes) do
+		if beam.Parent then
+			beam.Transparency = NumberSequence.new(0)
+		end
 	end
 end
 

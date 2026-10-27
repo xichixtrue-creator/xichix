@@ -357,7 +357,123 @@ def red_swirl(w=512, h=128, seed=16):
     return rgba(rgb, alpha)
 
 
+# ---------------------------------------------------------------- pure-energy layers (soft, additive)
+
+def energy_ring(size=512):
+    """Soft energy ring: white-hot core line fading through gold and orange into a red glow.
+    No hard edge anywhere, so overlapping rings melt into each other."""
+    x, y = _grid(size, size)
+    r = np.sqrt(x * x + y * y)
+    d = np.abs(r - 0.62)
+    core = np.exp(-(d / 0.05) ** 2) * 0.7
+    body = np.exp(-(d / 0.13) ** 2)
+    halo = np.exp(-(d / 0.26) ** 2) * 0.55
+    rgb = (np.array([1.0, 0.98, 0.85]) * core[..., None] + GOLD * (body - core).clip(0)[..., None]
+           + ORANGE * (halo - body * 0.5).clip(0)[..., None])
+    alpha = np.clip(core + body * 0.85 + halo, 0, 1) * _smooth(1 - r, 0.0, 0.12)
+    return rgba(np.clip(rgb / np.maximum(alpha[..., None], 1e-3), 0, 1), alpha)
+
+
+def hot_core(size=256):
+    """White-hot centre melting into gold and orange (for intersections and cores)."""
+    x, y = _grid(size, size)
+    r = np.sqrt(x * x + y * y)
+    heat = np.exp(-(r / 0.28) ** 2)
+    alpha = np.clip(np.exp(-(r / 0.5) ** 2) * 1.1, 0, 1) * _smooth(1 - r, 0, 0.15)
+    return rgba(heat_colour(0.55 + 0.45 * heat), alpha)
+
+
+def void(size=256):
+    """The star's dark eye: a black core that melts through deep red into the glow round it,
+    with no hard edge (alpha-blended, not additive)."""
+    x, y = _grid(size, size)
+    r = np.sqrt(x * x + y * y)
+    alpha = _smooth(0.7 - r, 0.0, 0.42)
+    heat = _smooth(r, 0.2, 0.7)
+    rgb = np.array([0.02, 0.0, 0.0]) * (1 - heat[..., None]) + np.array([0.45, 0.05, 0.01]) * heat[..., None]
+    return rgba(rgb, alpha)
+
+
+def flow_stroke(w=512, h=128):
+    """Light trail for the energy flowing round the figure-8: bright core, soft edges, fading tail."""
+    u = np.linspace(0, 1, w)[None, :] * np.ones((h, 1))
+    v = np.linspace(-1, 1, h)[:, None] * np.ones((1, w))
+    core = np.exp(-(v / 0.18) ** 2)
+    glow = np.exp(-(v / 0.6) ** 2)
+    fade = (1 - u) ** 1.4
+    rgb = np.array([1.0, 0.97, 0.8]) * core[..., None] + ORANGE * (glow - core).clip(0)[..., None]
+    alpha = np.clip(core + glow * 0.6, 0, 1) * fade
+    return rgba(np.clip(rgb / np.maximum((core + (glow - core).clip(0))[..., None], 1e-3), 0, 1), alpha)
+
+
+def energy_band(w=64, h=128):
+    """The same along its whole length: a white-hot line in a soft orange glow. The body of the
+    energy stream round the figure-8 (a trail one lap long, so it covers the whole loop)."""
+    v = np.linspace(-1, 1, h)[:, None] * np.ones((1, w))
+    core = np.exp(-(v / 0.16) ** 2)
+    glow = np.exp(-(v / 0.55) ** 2)
+    rgb = np.array([1.0, 0.95, 0.75]) * core[..., None] + ORANGE * (glow - core).clip(0)[..., None]
+    alpha = np.clip(core + glow * 0.55, 0, 1)
+    return rgba(np.clip(rgb / np.maximum((core + (glow - core).clip(0))[..., None], 1e-3), 0, 1), alpha)
+
+
+def energy_flow(w=512, h=128, seed=17):
+    """Streaks of energy that scroll up the blade (tiles left-right)."""
+    u = np.linspace(0, 1, w, endpoint=False)[None, :] * np.ones((h, 1))
+    v = np.linspace(-1, 1, h)[:, None] * np.ones((1, w))
+    n = fbm(h, w, 3, 6, seed, periodic_x=True)
+    streak = np.clip((fbm(h, w, 12, 3, seed + 4, periodic_x=True) - 0.45) * 3, 0, 1)
+    band = np.exp(-(v / (0.45 + 0.25 * n)) ** 2)
+    heat = streak * band
+    return rgba(heat_colour(0.5 + 0.5 * heat), np.clip(heat * 1.3, 0, 1))
+
+
+def energy_wisp(frame=256, grid=4, seed=18):
+    """Soft glowing wisps (no outline) that curl up and dissolve: 4x4 flipbook."""
+    out = np.zeros((frame * grid, frame * grid, 4), np.float32)
+    x, y = _grid(frame, frame)
+    w1 = fbm(frame, frame, 3, 3, seed) - 0.5
+    w2 = fbm(frame, frame, 3, 3, seed + 2) - 0.5
+    for k in range(grid * grid):
+        t = k / (grid * grid - 1)
+        sx = x * 0.9 + w1 * (0.4 + 0.6 * t) + 0.25 * np.sin(y * 3 + t * 6)
+        sy = y * 0.9 + 0.3 - 0.6 * t + w2 * (0.3 + 0.5 * t)
+        d = np.sqrt((sx / (0.22 + 0.25 * t)) ** 2 + ((sy + 0.1) / (0.5 + 0.3 * t)) ** 2)
+        heat = np.exp(-d ** 2 * 1.4) * (1 - t) ** 1.2
+        alpha = np.clip(np.exp(-d ** 2) * 1.2, 0, 1) * (1 - t) ** 1.1
+        alpha = alpha * _smooth(1 - np.maximum(np.abs(x), np.abs(y)), 0.0, 0.2)   # nothing reaches the cell edge
+        cell = rgba(heat_colour(0.45 + 0.55 * heat), alpha)
+        out[(k // grid) * frame:(k // grid + 1) * frame, (k % grid) * frame:(k % grid + 1) * frame] = cell
+    return out
+
+
+def energy_spike(w=512, h=128):
+    """A star spike made of light: tapers from the base (left) to a needle tip (right), with a
+    white-hot core, gold and orange body, a glowing red edge and a soft outer glow."""
+    u = np.linspace(0, 1, w)[None, :] * np.ones((h, 1))
+    v = np.abs(np.linspace(-1, 1, h))[:, None] * np.ones((1, w))
+    hw = 0.62 * (1 - u) ** 0.85 * _smooth(u, 0.0, 0.06) + 0.012
+    t = v / hw                                                      # 0 centre, 1 edge
+    core = np.exp(-(t / 0.3) ** 2)
+    inside = _smooth(1 - t, -0.05, 0.12)
+    edge = np.exp(-((t - 0.92) / 0.14) ** 2)
+    outer = np.exp(-((v - hw).clip(0) / 0.16) ** 2) * (1 - inside)
+    rgb = heat_colour(np.clip(0.55 + 0.45 * core, 0, 1))
+    rgb = rgb * (1 - edge[..., None] * 0.6) + RED * edge[..., None] * 0.6
+    rgb = rgb * inside[..., None] + ORANGE * (1 - inside)[..., None]
+    alpha = np.clip(inside * (0.75 + 0.25 * core) + outer * 0.45, 0, 1) * _smooth(1 - u, 0.0, 0.03)
+    return rgba(np.clip(rgb, 0, 1), alpha)
+
+
 VFX = {
+    "EnergyRing": energy_ring,
+    "EnergySpike": energy_spike,
+    "HotCore": hot_core,
+    "Void": void,
+    "FlowStroke": flow_stroke,
+    "EnergyBand": energy_band,
+    "EnergyFlow": energy_flow,
+    "EnergyWisp": energy_wisp,
     "RedSwirl": red_swirl,
     "Twinkle": twinkle,
     "Trail": fire_trail,

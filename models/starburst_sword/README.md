@@ -1,12 +1,14 @@
 # Starburst Blade
 
 The fiery sword from your effects sheet (item 3), built in Blender and set up as a
-Roblox tool. The sheet's other items (the darts, ground flames, the starburst impact
-and the portal swirl) became its effects.
+Roblox tool. It keeps the reference's silhouette and layout, but it is drawn entirely
+from glowing energy, so it reads as a legendary energy weapon and not as a solid model.
+The sheet's other items (the darts, ground flames, the starburst impact and the portal
+swirl) became its effects.
 
 ![reference vs model](previews/compare_reference.png)
 
-| In game it reads as an effect | Star close-up | Special attack |
+| Made of energy | The blended circles | Special attack |
 | --- | --- | --- |
 | ![hero](previews/hero.png) | ![star](previews/star_detail.png) | ![special](previews/vfx_special.png) |
 
@@ -19,21 +21,44 @@ the sword is 4.5 studs long.
 - **Blade:** a 748 px needle that swells into a flame-shaped leaf near the star. It has a
   yellow-white core, an orange band, an orange-brown rim on one edge, and a red band plus
   a dark crimson band with white sparkles on the other edge.
-- **Star guard:** a black eye in a glowing yellow ring with an orange halo. It has seven
-  tapered spikes at the measured angles and lengths (bright cores, dark edges), flame petals
-  between them, and four curling **red swirl** ribbons.
+- **Star guard:** a dark eye inside **two energy circles that blend into each other** (one round
+  the eye, one round the top of the handle). It has seven spikes at the measured angles and
+  lengths, flame petals between them, and four curling **red swirl** ribbons.
 - **Handle:** a 382 px tapering spike with dark red edges, an orange band and a thin yellow centre line.
 
-## Why it looks like VFX and not a model
+## Made of energy, not a model
 
-- Every visible part is **Neon**, including the dark outlines (deep crimson glow), so nothing is shaded like plastic.
-- The blade and handle are drawn on top by **camera-facing beams** with textures painted from the
-  measured reference (`fx_bladepaint.png`, `fx_handlepaint.png`), so they look hand-painted from every angle.
-- The star **shimmers**: starburst sprites fade in and out on top of the 3D spikes, with a hot glow and a light.
-- The ribbons are **red swirl trails** that keep tracing the reference's ribbon paths outward
-  from the star. They smear into swirls when you swing.
-- **Flame licks** crawl up the blade, embers rise, white sparkles twinkle, a ForceField
-  heat shimmer wraps the blade, and fiery **darts** shoot off the star's spikes now and then.
+The meshes are only a faint glow underneath (`Config.VFX.MeshTransparency = 0.8`). Everything you
+see is camera-facing beams and particles that add light, so the sword looks like one flowing effect
+from every angle.
+
+**The blended circles** are one energy structure, not two rings placed next to each other:
+
+- **One stream:** a single closed stream of energy runs anticlockwise round the top circle, crosses
+  the junction, runs clockwise round the bottom circle and crosses back. The two crossings form an X
+  where the circles meet. The stream's glowing body is a ring of smoothly curved beams. A wave of
+  light keeps running round it.
+- **Moving light:** three bright light trails chase each other along the stream, braiding as they go
+  and shedding sparkle dust.
+- **Soft rings:** each circle also has soft energy rings that slowly spin and breathe. Their glows
+  overlap, so there is no seam or gap between the circles.
+- **The junction:** where the circles meet is a white-hot core, the brightest point on the sword.
+  Energy fragments fly off it, and an energy ring pulses outward from it now and then.
+- **The eye:** a dark eye sits in the top circle, melting into the glow with no hard edge.
+
+**The rest of the sword:**
+
+- **Blade and handle:** camera-facing beams painted from the measured reference
+  (`fx_bladepaint.png`, `fx_handlepaint.png`), with energy streaks scrolling up through them and a
+  white-hot core line.
+- **Spikes:** beams of light (white core, gold and orange body, glowing red edge) that flicker like
+  live energy.
+- **Particles:**
+  - soft energy wisps curl off the blade and dissolve;
+  - embers rise and sparkles twinkle;
+  - a ForceField heat shimmer wraps the blade;
+  - fiery darts shoot off the spikes now and then.
+- **Ribbons:** red swirl trails keep tracing the reference's ribbons outward from the star.
 
 ## Effects
 
@@ -74,7 +99,11 @@ Everything is in `ReplicatedStorage.StarburstSword.Config`:
 - **Combat:** damage, ranges and cooldowns.
 - **Controls and feel:** the special attack key, slash angles, sounds and animations.
 - **Textures:** overrides for any effect texture.
+- **Look:** `MeshTransparency` (1 = effects only, 0 = solid meshes).
+- **The figure-8 stream:** `Figure8`, `FlowSpeed`, `FlowStrands`, `FlowLifetime`, `FlowWidth`.
 - **Idle extras:** the swirl speed, width and length, the darts, and the screen flash and shake.
+
+A `Config` kept from an older install still works: any new setting it lacks uses its default.
 
 To resize the sword, change `SWORD_SCALE` at the top of `Installer.lua` and run it again.
 
@@ -91,13 +120,14 @@ The Mo Feng Blade (`models/sword`) is a separate package, so both swords work in
 
 | File | What it is |
 | --- | --- |
-| `export/StarburstSword.fbx` / `.glb` | The sword: 7 meshes, 14,284 triangles |
-| `export/StarburstVFX.fbx` / `.glb` | Carrier quads that bring the 16 effect textures into Roblox |
+| `export/StarburstSword.fbx` / `.glb` | The sword's faint base: 7 meshes, 13,256 triangles |
+| `export/StarburstVFX.fbx` / `.glb` | Carrier quads that bring the 24 effect textures into Roblox |
 | `export/StarburstSword.blend` | The Blender scene |
 | `roblox/Installer.lua` | Run once in Studio |
 | `roblox/*.lua` | The scripts (edit these, then run `build_installer.py`) |
+| `roblox/Layout.lua` | Generated: spike tips, ribbon paths and the figure-8 path, measured in Blender |
 | `blender/build_starburst.py` | Rebuilds the model, textures, exports and previews (`--render`) |
-| `blender/fire_textures.py` | All the effect textures, painted in the sheet's style |
+| `blender/fire_textures.py` | All the effect textures: the energy layers and the sheet-style fire |
 | `textures/` | Every texture as a PNG |
 
 ## Good to know
@@ -107,5 +137,8 @@ The Mo Feng Blade (`models/sword`) is a separate package, so both swords work in
   anything prints an error, send it to me.
 - The camera-facing blade paint shows the dark sparkle band on one edge from the front. From the
   other side it mirrors, the same as a real double-sided effect.
+- The figure-8 stream follows the flat of the sword, while the soft rings always face the camera. Seen
+  from far round the side, the stream narrows into a line and the rings stay round.
+- Re-run the installer after updating: it adds the new beams and emitters to the Tool.
 - If the importer doesn't bring a texture in, the installer tells you which one is missing. Upload the PNG
   from `textures/` and put its ID in `Config.Textures`.
