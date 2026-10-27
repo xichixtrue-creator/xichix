@@ -1,0 +1,61 @@
+{
+ "parts": {
+  "Shaft": {
+   "verts": 622,
+   "tris": 1240,
+   "pieces": 1,
+   "nonManifoldEdges": 0,
+   "looseVerts": 0,
+   "zeroAreaFaces": 0,
+   "invertedPieces": 0,
+   "transformApplied": true
+  },
+  "Gold": {
+   "verts": 4784,
+   "tris": 9216,
+   "pieces": 90,
+   "nonManifoldEdges": 0,
+   "looseVerts": 0,
+   "zeroAreaFaces": 0,
+   "invertedPieces": 0,
+   "transformApplied": true
+  },
+  "Ring": {
+   "verts": 888,
+   "tris": 1760,
+   "pieces": 6,
+   "nonManifoldEdges": 0,
+   "looseVerts": 0,
+   "zeroAreaFaces": 0,
+   "invertedPieces": 0,
+   "transformApplied": true
+  },
+  "Emerald": {
+   "verts": 910,
+   "tris": 1736,
+   "pieces": 21,
+   "nonManifoldEdges": 0,
+   "looseVerts": 0,
+   "zeroAreaFaces": 0,
+   "invertedPieces": 0,
+   "transformApplied": true
+  },
+  "Glow": {
+   "verts": 538,
+   "tris": 1040,
+   "pieces": 9,
+   "nonManifoldEdges": 0,
+   "looseVerts": 0,
+   "zeroAreaFaces": 0,
+   "invertedPieces": 0,
+   "transformApplied": true
+  }
+ },
+ "floatingPieces": 0,
+ "totalTris": 14992,
+ "size": [
+  1.389,
+  1.2,
+  6.659
+ ]
+}
