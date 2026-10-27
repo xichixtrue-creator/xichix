@@ -1,0 +1,468 @@
+{
+  "units": "studs",
+  "axes": "blade +Z, width X, front -Y (Blender)",
+  "parts": {
+    "Handle": {
+      "verts": 255,
+      "tris": 448,
+      "bboxMin": [
+        -0.0827,
+        -0.0827,
+        -0.86
+      ],
+      "bboxMax": [
+        0.0827,
+        0.0827,
+        -0.26
+      ]
+    },
+    "Hilt": {
+      "verts": 3612,
+      "tris": 7088,
+      "bboxMin": [
+        -0.6393,
+        -0.165,
+        -1.4443
+      ],
+      "bboxMax": [
+        0.6393,
+        0.165,
+        0.9943
+      ]
+    },
+    "BladeCore": {
+      "verts": 829,
+      "tris": 1654,
+      "bboxMin": [
+        -0.1824,
+        -0.0617,
+        0.35
+      ],
+      "bboxMax": [
+        0.1833,
+        0.0617,
+        2.6372
+      ]
+    },
+    "BladeEdge": {
+      "verts": 921,
+      "tris": 1838,
+      "bboxMin": [
+        -0.285,
+        -0.034,
+        0.35
+      ],
+      "bboxMax": [
+        0.285,
+        0.034,
+        3.25
+      ]
+    },
+    "BladeRunes": {
+      "verts": 384,
+      "tris": 340,
+      "bboxMin": [
+        -0.2589,
+        -0.0277,
+        0.4659
+      ],
+      "bboxMax": [
+        0.2589,
+        0.0277,
+        3.1489
+      ]
+    },
+    "EnergyVeins": {
+      "verts": 322,
+      "tris": 296,
+      "bboxMin": [
+        -0.2019,
+        -0.0745,
+        0.255
+      ],
+      "bboxMax": [
+        0.2019,
+        0.0745,
+        2.4673
+      ]
+    },
+    "AccentGems": {
+      "verts": 128,
+      "tris": 188,
+      "bboxMin": [
+        -0.195,
+        -0.104,
+        -1.21
+      ],
+      "bboxMax": [
+        0.195,
+        0.104,
+        0.1706
+      ]
+    },
+    "BladeAura": {
+      "verts": 287,
+      "tris": 510,
+      "bboxMin": [
+        -0.3531,
+        -0.0809,
+        0.62
+      ],
+      "bboxMax": [
+        0.3531,
+        0.0809,
+        3.35
+      ]
+    }
+  },
+  "vfx": {
+    "SlashArc": {
+      "verts": 196,
+      "tris": 288,
+      "bboxMin": [
+        -0.9995,
+        -0.2588,
+        0.0
+      ],
+      "bboxMax": [
+        0.9995,
+        1.0,
+        0.0
+      ],
+      "pivotFromCenter": [
+        -0.0,
+        -0.3706,
+        -0.0
+      ]
+    },
+    "SlashCore": {
+      "verts": 98,
+      "tris": 96,
+      "bboxMin": [
+        -0.9995,
+        -0.2588,
+        0.003
+      ],
+      "bboxMax": [
+        0.9995,
+        1.0,
+        0.003
+      ],
+      "pivotFromCenter": [
+        -0.0,
+        -0.3706,
+        -0.003
+      ]
+    },
+    "ShockRing": {
+      "verts": 130,
+      "tris": 128,
+      "bboxMin": [
+        -1.0,
+        -1.0,
+        0.0
+      ],
+      "bboxMax": [
+        1.0,
+        1.0,
+        0.0
+      ]
+    },
+    "RingCore": {
+      "verts": 130,
+      "tris": 128,
+      "bboxMin": [
+        -1.0,
+        -1.0,
+        0.003
+      ],
+      "bboxMax": [
+        1.0,
+        1.0,
+        0.003
+      ]
+    },
+    "Shard1": {
+      "verts": 8,
+      "tris": 12,
+      "bboxMin": [
+        -0.0477,
+        -0.0455,
+        -0.096
+      ],
+      "bboxMax": [
+        0.0385,
+        0.0396,
+        0.144
+      ]
+    },
+    "Shard2": {
+      "verts": 8,
+      "tris": 12,
+      "bboxMin": [
+        -0.0465,
+        -0.0398,
+        -0.096
+      ],
+      "bboxMax": [
+        0.0509,
+        0.0371,
+        0.144
+      ]
+    },
+    "Rock1": {
+      "verts": 12,
+      "tris": 20,
+      "bboxMin": [
+        -0.0991,
+        -0.0848,
+        -0.07
+      ],
+      "bboxMax": [
+        0.1083,
+        0.0756,
+        0.0728
+      ]
+    },
+    "Rock2": {
+      "verts": 12,
+      "tris": 20,
+      "bboxMin": [
+        -0.0837,
+        -0.0546,
+        -0.0592
+      ],
+      "bboxMax": [
+        0.0901,
+        0.0675,
+        0.0576
+      ]
+    },
+    "Rock3": {
+      "verts": 12,
+      "tris": 20,
+      "bboxMin": [
+        -0.1234,
+        -0.0653,
+        -0.0609
+      ],
+      "bboxMax": [
+        0.1389,
+        0.0624,
+        0.0711
+      ]
+    },
+    "Tex_Glow": {
+      "verts": 4,
+      "tris": 2,
+      "bboxMin": [
+        2.0,
+        0.0,
+        0.0
+      ],
+      "bboxMax": [
+        2.2,
+        0.0,
+        0.2
+      ]
+    },
+    "Tex_Spark": {
+      "verts": 4,
+      "tris": 2,
+      "bboxMin": [
+        2.3,
+        0.0,
+        0.0
+      ],
+      "bboxMax": [
+        2.5,
+        0.0,
+        0.2
+      ]
+    },
+    "Tex_Star": {
+      "verts": 4,
+      "tris": 2,
+      "bboxMin": [
+        2.6,
+        0.0,
+        0.0
+      ],
+      "bboxMax": [
+        2.8,
+        0.0,
+        0.2
+      ]
+    },
+    "Tex_Ember": {
+      "verts": 4,
+      "tris": 2,
+      "bboxMin": [
+        2.9,
+        0.0,
+        0.0
+      ],
+      "bboxMax": [
+        3.1,
+        0.0,
+        0.2
+      ]
+    },
+    "Tex_Smoke": {
+      "verts": 4,
+      "tris": 2,
+      "bboxMin": [
+        3.2,
+        0.0,
+        0.0
+      ],
+      "bboxMax": [
+        3.4,
+        0.0,
+        0.2
+      ]
+    },
+    "Tex_Flash": {
+      "verts": 4,
+      "tris": 2,
+      "bboxMin": [
+        3.5,
+        0.0,
+        0.0
+      ],
+      "bboxMax": [
+        3.7,
+        0.0,
+        0.2
+      ]
+    },
+    "Tex_RingSprite": {
+      "verts": 4,
+      "tris": 2,
+      "bboxMin": [
+        3.8,
+        0.0,
+        0.0
+      ],
+      "bboxMax": [
+        4.0,
+        0.0,
+        0.2
+      ]
+    },
+    "Tex_Wisp": {
+      "verts": 4,
+      "tris": 2,
+      "bboxMin": [
+        4.1,
+        0.0,
+        0.0
+      ],
+      "bboxMax": [
+        4.3,
+        0.0,
+        0.2
+      ]
+    },
+    "Tex_Beam": {
+      "verts": 4,
+      "tris": 2,
+      "bboxMin": [
+        4.4,
+        0.0,
+        0.0
+      ],
+      "bboxMax": [
+        4.6,
+        0.0,
+        0.2
+      ]
+    },
+    "Tex_Lightning": {
+      "verts": 4,
+      "tris": 2,
+      "bboxMin": [
+        4.7,
+        0.0,
+        0.0
+      ],
+      "bboxMax": [
+        4.9,
+        0.0,
+        0.2
+      ]
+    },
+    "Tex_Trail": {
+      "verts": 4,
+      "tris": 2,
+      "bboxMin": [
+        5.0,
+        0.0,
+        0.0
+      ],
+      "bboxMax": [
+        5.2,
+        0.0,
+        0.2
+      ]
+    },
+    "Tex_HiltGold": {
+      "verts": 4,
+      "tris": 2,
+      "bboxMin": [
+        5.6,
+        0.0,
+        0.0
+      ],
+      "bboxMax": [
+        5.8,
+        0.0,
+        0.2
+      ]
+    }
+  },
+  "points": {
+    "BladeBase": [
+      0,
+      0,
+      0.8
+    ],
+    "BladeTip": [
+      0,
+      0,
+      3.21
+    ],
+    "BladeMid": [
+      0,
+      0,
+      1.9
+    ],
+    "FlowStart": [
+      0,
+      0,
+      0.85
+    ],
+    "FlowEnd": [
+      0,
+      0,
+      3.05
+    ],
+    "GuardCenter": [
+      0,
+      0,
+      0.42
+    ],
+    "Pommel": [
+      0,
+      0,
+      -1.1
+    ],
+    "Grip": [
+      0,
+      0,
+      -0.47
+    ],
+    "BladeHalfWidth": 0.285,
+    "BladeHalfThickness": 0.06
+  }
+}
