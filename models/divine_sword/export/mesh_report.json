@@ -1,0 +1,91 @@
+{
+ "parts": {
+  "Blade": {
+   "verts": 1482,
+   "tris": 2944,
+   "pieces": 5,
+   "nonManifoldEdges": 0,
+   "looseVerts": 0,
+   "zeroAreaFaces": 0,
+   "invertedPieces": 0,
+   "transformApplied": true
+  },
+  "BladeOrnament": {
+   "verts": 1948,
+   "tris": 3808,
+   "pieces": 26,
+   "nonManifoldEdges": 0,
+   "looseVerts": 0,
+   "zeroAreaFaces": 0,
+   "invertedPieces": 0,
+   "transformApplied": true
+  },
+  "Guard": {
+   "verts": 1996,
+   "tris": 3912,
+   "pieces": 26,
+   "nonManifoldEdges": 0,
+   "looseVerts": 0,
+   "zeroAreaFaces": 0,
+   "invertedPieces": 0,
+   "transformApplied": true
+  },
+  "GuardCurls": {
+   "verts": 1098,
+   "tris": 2168,
+   "pieces": 7,
+   "nonManifoldEdges": 0,
+   "looseVerts": 0,
+   "zeroAreaFaces": 0,
+   "invertedPieces": 0,
+   "transformApplied": true
+  },
+  "Gemstones": {
+   "verts": 276,
+   "tris": 480,
+   "pieces": 18,
+   "nonManifoldEdges": 0,
+   "looseVerts": 0,
+   "zeroAreaFaces": 0,
+   "invertedPieces": 0,
+   "transformApplied": true
+  },
+  "Grip": {
+   "verts": 258,
+   "tris": 512,
+   "pieces": 1,
+   "nonManifoldEdges": 0,
+   "looseVerts": 0,
+   "zeroAreaFaces": 0,
+   "invertedPieces": 0,
+   "transformApplied": true
+  },
+  "GripGold": {
+   "verts": 354,
+   "tris": 680,
+   "pieces": 7,
+   "nonManifoldEdges": 0,
+   "looseVerts": 0,
+   "zeroAreaFaces": 0,
+   "invertedPieces": 0,
+   "transformApplied": true
+  },
+  "Pommel": {
+   "verts": 388,
+   "tris": 744,
+   "pieces": 10,
+   "nonManifoldEdges": 0,
+   "looseVerts": 0,
+   "zeroAreaFaces": 0,
+   "invertedPieces": 0,
+   "transformApplied": true
+  }
+ },
+ "floatingPieces": 0,
+ "totalTris": 15248,
+ "size": [
+  1.05,
+  0.159,
+  4.943
+ ]
+}

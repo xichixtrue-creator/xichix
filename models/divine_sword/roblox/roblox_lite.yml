@@ -1,0 +1,31 @@
+# Minimal Roblox globals for selene (the full API std needs a download this
+# environment can't make). Enough to catch undefined / misspelled names.
+base: luau
+name: roblox_lite
+globals:
+  game: {any: true}
+  workspace: {any: true}
+  script: {any: true}
+  plugin: {any: true}
+  Enum: {any: true}
+  Instance: {any: true}
+  Vector3: {any: true}
+  Vector2: {any: true}
+  CFrame: {any: true}
+  Color3: {any: true}
+  ColorSequence: {any: true}
+  ColorSequenceKeypoint: {any: true}
+  NumberSequence: {any: true}
+  NumberSequenceKeypoint: {any: true}
+  NumberRange: {any: true}
+  UDim2: {any: true}
+  TweenInfo: {any: true}
+  RaycastParams: {any: true}
+  OverlapParams: {any: true}
+  task: {any: true}
+  typeof:
+    args:
+      - type: any
+  warn:
+    args:
+      - type: "..."
