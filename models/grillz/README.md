@@ -1,8 +1,28 @@
 # Diamond Grillz
 
-Iced-out gold grillz, 6 upper + 6 lower teeth, in two versions.
+Iced-out gold grillz, 6 upper + 6 lower teeth, in three versions.
 
-## High detail (`grillz_detailed.*`)
+## Photo-textured (`grillz_photo.*`), 960 vertices
+
+![photo textured](preview_photo.png)
+![close-up](preview_photo_closeup.png)
+
+Each tooth is traced from the reference photo and wears its own piece of that photo
+as its texture, so it looks like the real thing at under 1000 vertices.
+
+| File | What it is |
+| --- | --- |
+| `grillz_photo.glb` | **Easiest:** one file, texture built in. Blender: File > Import > glTF 2.0. Roblox: Import 3D. |
+| `grillz_photo.obj` / `.mtl` + `grillz_photo_texture.png` | Same model as OBJ; keep the three files in one folder. |
+| `grillz_photo.py` | Rebuilds everything from the photo: `python3 grillz_photo.py photo.jpg` (Pillow + numpy). |
+
+In Roblox, if the texture doesn't come through with the import, upload
+`grillz_photo_texture.png` and set it as the MeshPart's `TextureID`.
+
+The texture is cut from a watermarked product photo, which is probably copyrighted.
+Check you have the right to use it before publishing a game with it.
+
+## High detail (`grillz_detailed.*`), real 3D stones
 
 ![high detail](preview_detailed.png)
 ![close-up](preview_detailed_closeup.png)
