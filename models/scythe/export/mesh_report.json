@@ -1,0 +1,71 @@
+{
+ "parts": {
+  "Shaft": {
+   "verts": 3401,
+   "tris": 6368,
+   "pieces": 119,
+   "nonManifoldEdges": 0,
+   "looseVerts": 0,
+   "zeroAreaFaces": 0,
+   "invertedPieces": 0,
+   "transformApplied": true
+  },
+  "HeadArmor": {
+   "verts": 2140,
+   "tris": 3888,
+   "pieces": 100,
+   "nonManifoldEdges": 0,
+   "looseVerts": 0,
+   "zeroAreaFaces": 0,
+   "invertedPieces": 0,
+   "transformApplied": true
+  },
+  "Blade": {
+   "verts": 587,
+   "tris": 1110,
+   "pieces": 16,
+   "nonManifoldEdges": 0,
+   "looseVerts": 0,
+   "zeroAreaFaces": 0,
+   "invertedPieces": 0,
+   "transformApplied": true
+  },
+  "Crystals": {
+   "verts": 258,
+   "tris": 436,
+   "pieces": 20,
+   "nonManifoldEdges": 0,
+   "looseVerts": 0,
+   "zeroAreaFaces": 0,
+   "invertedPieces": 0,
+   "transformApplied": true
+  },
+  "Core": {
+   "verts": 42,
+   "tris": 80,
+   "pieces": 1,
+   "nonManifoldEdges": 0,
+   "looseVerts": 0,
+   "zeroAreaFaces": 0,
+   "invertedPieces": 0,
+   "transformApplied": true
+  },
+  "Glow": {
+   "verts": 230,
+   "tris": 452,
+   "pieces": 2,
+   "nonManifoldEdges": 0,
+   "looseVerts": 0,
+   "zeroAreaFaces": 0,
+   "invertedPieces": 0,
+   "transformApplied": true
+  }
+ },
+ "floatingPieces": 0,
+ "totalTris": 12334,
+ "size": [
+  2.5,
+  0.596,
+  7.08
+ ]
+}
