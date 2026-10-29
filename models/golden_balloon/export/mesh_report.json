@@ -1,0 +1,101 @@
+{
+ "parts": {
+  "Balloon": {
+   "verts": 2162,
+   "tris": 4320,
+   "pieces": 1,
+   "nonManifoldEdges": 0,
+   "looseVerts": 0,
+   "zeroAreaFaces": 0,
+   "invertedPieces": 0,
+   "transformApplied": true
+  },
+  "BalloonNozzle": {
+   "verts": 266,
+   "tris": 528,
+   "pieces": 1,
+   "nonManifoldEdges": 0,
+   "looseVerts": 0,
+   "zeroAreaFaces": 0,
+   "invertedPieces": 0,
+   "transformApplied": true
+  },
+  "String": {
+   "verts": 330,
+   "tris": 656,
+   "pieces": 1,
+   "nonManifoldEdges": 0,
+   "looseVerts": 0,
+   "zeroAreaFaces": 0,
+   "invertedPieces": 0,
+   "transformApplied": true
+  },
+  "Crown": {
+   "verts": 5568,
+   "tris": 10992,
+   "pieces": 63,
+   "nonManifoldEdges": 0,
+   "looseVerts": 0,
+   "zeroAreaFaces": 0,
+   "invertedPieces": 0,
+   "transformApplied": true
+  },
+  "CrownGems": {
+   "verts": 696,
+   "tris": 1296,
+   "pieces": 24,
+   "nonManifoldEdges": 0,
+   "looseVerts": 0,
+   "zeroAreaFaces": 0,
+   "invertedPieces": 0,
+   "transformApplied": true
+  },
+  "LeftWing": {
+   "verts": 902,
+   "tris": 1760,
+   "pieces": 11,
+   "nonManifoldEdges": 0,
+   "looseVerts": 0,
+   "zeroAreaFaces": 0,
+   "invertedPieces": 0,
+   "transformApplied": true
+  },
+  "RightWing": {
+   "verts": 902,
+   "tris": 1760,
+   "pieces": 11,
+   "nonManifoldEdges": 0,
+   "looseVerts": 0,
+   "zeroAreaFaces": 0,
+   "invertedPieces": 0,
+   "transformApplied": true
+  },
+  "LeftWingFeathers": {
+   "verts": 1826,
+   "tris": 3480,
+   "pieces": 43,
+   "nonManifoldEdges": 0,
+   "looseVerts": 0,
+   "zeroAreaFaces": 0,
+   "invertedPieces": 0,
+   "transformApplied": true
+  },
+  "RightWingFeathers": {
+   "verts": 1826,
+   "tris": 3480,
+   "pieces": 43,
+   "nonManifoldEdges": 0,
+   "looseVerts": 0,
+   "zeroAreaFaces": 0,
+   "invertedPieces": 0,
+   "transformApplied": true
+  }
+ },
+ "floatingPieces": 0,
+ "totalTris": 28272,
+ "size": [
+  4.733,
+  2.26,
+  5.11
+ ]
+}
